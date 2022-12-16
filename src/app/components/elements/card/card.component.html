@@ -1,0 +1,11 @@
+<div class="card" (click)="cardClicked.emit()" [@cardFlip]="card.state">
+  <div class="face back">
+    <img
+      class="center-cropped"
+      src="https://media.hearthpwn.com/attachments/5/248/warlords-cardback.png"
+    />
+  </div>
+  <div class="center-cropped face front">
+    <img [src]="card.imageUrl" />
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<mat-toolbar color="primary" class="text-center">
+  Card Memory Game
+</mat-toolbar>
+<mat-form-field class="example-form-field">
+  <input matInput type="number" [(ngModel)]="rowHeight" />
+</mat-form-field>
+<mat-form-field class="example-form-field">
+  <input matInput type="number" [(ngModel)]="colNum" />
+</mat-form-field>
+<mat-form-field class="example-form-field">
+  <input matInput type="number" [(ngModel)]="imageWidth" />
+</mat-form-field>
+<div class="p-16">
+  <p class="text-center">
+    Tap on a card to flip it. You can only flip a maximum of two cards at a
+    time. A match will remove those cards!
+  </p>
+  <div class="main-container">
+    <mat-grid-list [cols]="colNum" [rowHeight]="rowHeight + 'rem'">
+      <mat-grid-tile *ngFor="let card of cards; let idx = index">
+        <app-card
+          [ngStyle]="{
+            height: [rowHeight + 'rem'],
+            width: [imageWidth + 'rem']
+          }"
+          class="m-card"
+          [card]="card"
+          (cardClicked)="cardClicked(idx)"
+        >
+        </app-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>

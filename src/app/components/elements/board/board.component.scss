@@ -1,0 +1,19 @@
+.m-card {
+  width: 10rem;
+  height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-grid-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+mat-grid-tile {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
