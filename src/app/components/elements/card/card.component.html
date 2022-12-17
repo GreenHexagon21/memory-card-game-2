@@ -1,11 +1,12 @@
-<div class="card" (click)="cardClicked.emit()" [@cardFlip]="card.state">
+<div
+  class="m-card center-cropped mat-elevation-z10"
+  (click)="cardClicked.emit()"
+  [@cardFlip]="card.state"
+>
   <div class="face back">
-    <img
-      class="center-cropped"
-      src="https://media.hearthpwn.com/attachments/5/248/warlords-cardback.png"
-    />
+    <img class="center-cropped" [src]="bgImageUrl" />
   </div>
-  <div class="center-cropped face front">
+  <div class="center-cropped face front mat-elevation-z10">
     <img [src]="card.imageUrl" />
   </div>
 </div>

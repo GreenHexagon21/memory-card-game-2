@@ -12,13 +12,15 @@ import { MainComponent } from './components/pages/main/main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CardComponent } from './components/elements/card/card.component';
 import { BoardComponent } from './components/elements/board/board.component';
+import { HeaderComponent } from './components/elements/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     CardComponent,
-    BoardComponent
+    BoardComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

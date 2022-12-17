@@ -1,19 +1,26 @@
-.m-card {
-  width: 10rem;
+
+.center-cropped {
+  object-fit: cover;
+  /* Do not scale the image */
+  object-position: center;
+  /* Center the image within the element */
   height: 10rem;
+  width: 10rem;
+  border-radius: 10%;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 40rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.all-contanier {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-mat-grid-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-mat-grid-tile {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
 }

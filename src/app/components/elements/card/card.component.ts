@@ -23,7 +23,6 @@ import { Card } from 'src/app/shared/models/card';
       state(
         "matched",
         style({
-          visibility: "false",
           transform: "scale(0.05)",
           opacity: 0
         })
@@ -36,6 +35,7 @@ import { Card } from 'src/app/shared/models/card';
 })
 export class CardComponent {
   @Input() card: Card;
+  @Input() bgImageUrl: string;
 
   @Output() cardClicked = new EventEmitter();
 

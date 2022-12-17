@@ -11,11 +11,15 @@ export class BoardComponent  implements OnInit {
 
   cards : Card[];
   rawCards;
-  url = 'https://e621.net/posts.json?tags=set%3Adrate';
+  urlBase = 'https://e621.net/posts.json?tags=set%3A';
   flippedCards: Card[] = [];
-  rowHeight : number = 10;
-  colNum : number = 3;
-  imageWidth: number;
+  imageHeight : number = 10;
+  imageWidth: number = 7;
+  containerWidth : number = 5;
+  containerHeight: number = 3;
+  poolName : string = 'drate';
+  bgUrl : string = 'https://media.hearthpwn.com/attachments/5/248/warlords-cardback.png';
+
 
   matchedCount = 0;
 
@@ -24,19 +28,28 @@ export class BoardComponent  implements OnInit {
   }
 
   async ngOnInit() {
+    await this.prepCards();
+    console.log(this.cards);
+  }
+
+  async prepCards() {
     await this.getCards();
     this.cards = this.communicationService.doubleArray(this.cards)
     this.cards = this.communicationService.shuffleArray(this.cards);
-    console.log(this.cards);
   }
 
   async getCards() {
     var jsonData;
-    await this.communicationService.getResponseFromUrl(this.url).then( data => {
+    await this.communicationService.getResponseFromUrl(this.urlBase+this.poolName).then( data => {
       jsonData = data;
     }
     )
     this.cards = this.communicationService.extractCardsFromJSON(jsonData);
+  }
+
+  async queryNewUrls() {
+    await this.prepCards();
+    console.log(this.cards);
   }
 
   cardClicked(index: number): void {
@@ -47,14 +60,29 @@ export class BoardComponent  implements OnInit {
       this.flippedCards.push(cardInfo);
 
       if (this.flippedCards.length > 1) {
-        //this.checkForCardMatch();
+        this.checkForCardMatch();
       }
 
-    } else if (cardInfo.state === 'flipped') {
-      cardInfo.state = 'default';
-      this.flippedCards.pop();
-
     }
+  }
+  checkForCardMatch(): void {
+    setTimeout(() => {
+      const cardOne = this.flippedCards[0];
+      const cardTwo = this.flippedCards[1];
+      const nextState = cardOne.id === cardTwo.id ? 'matched' : 'default';
+      cardOne.state = cardTwo.state = nextState;
+
+      this.flippedCards = [];
+      console.log(this.matchedCount);
+      if (nextState === 'matched') {
+        this.matchedCount++;
+
+        if (this.matchedCount === this.cards.length) {
+          console.log("end");
+        }
+      }
+
+    }, 1000);
   }
 
 }

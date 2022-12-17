@@ -1,34 +1,41 @@
-<mat-toolbar color="primary" class="text-center">
-  Card Memory Game
-</mat-toolbar>
 <mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="rowHeight" />
+  <input matInput type="number" [(ngModel)]="containerWidth" />
 </mat-form-field>
 <mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="colNum" />
+  <input matInput type="number" [(ngModel)]="containerHeight" />
+</mat-form-field>
+<mat-form-field class="example-form-field">
+  <input matInput type="number" [(ngModel)]="imageHeight" />
 </mat-form-field>
 <mat-form-field class="example-form-field">
   <input matInput type="number" [(ngModel)]="imageWidth" />
 </mat-form-field>
-<div class="p-16">
-  <p class="text-center">
-    Tap on a card to flip it. You can only flip a maximum of two cards at a
-    time. A match will remove those cards!
-  </p>
-  <div class="main-container">
-    <mat-grid-list [cols]="colNum" [rowHeight]="rowHeight + 'rem'">
-      <mat-grid-tile *ngFor="let card of cards; let idx = index">
-        <app-card
-          [ngStyle]="{
-            height: [rowHeight + 'rem'],
-            width: [imageWidth + 'rem']
-          }"
-          class="m-card"
-          [card]="card"
-          (cardClicked)="cardClicked(idx)"
-        >
-        </app-card>
-      </mat-grid-tile>
-    </mat-grid-list>
+<mat-form-field class="example-form-field">
+  <input matInput type="text" [(ngModel)]="poolName" />
+</mat-form-field>
+<mat-form-field class="example-form-field">
+  <input matInput type="text" [(ngModel)]="bgUrl" />
+</mat-form-field>
+<button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
+<div class="all-contanier">
+  <div
+    [ngStyle]="{
+      height: [containerHeight * (imageHeight + 1) + 'rem'],
+      width: [containerWidth * (imageWidth + 1) + 'rem']
+    }"
+    class="container"
+  >
+    <ng-container *ngFor="let card of cards; let idx = index">
+      <app-card
+        [ngStyle]="{
+          height: [imageHeight + 'rem'],
+          width: [imageWidth + 'rem']
+        }"
+        [card]="card"
+        [bgImageUrl]="bgUrl"
+        (cardClicked)="cardClicked(idx)"
+      >
+      </app-card>
+    </ng-container>
   </div>
 </div>
