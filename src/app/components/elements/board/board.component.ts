@@ -1,6 +1,7 @@
 import { Card } from './../../../shared/models/card';
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from 'src/app/shared/services/communication.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -19,7 +20,9 @@ export class BoardComponent  implements OnInit {
   containerHeight: number = 3;
   poolName : string = 'drate';
   bgUrl : string = 'https://media.hearthpwn.com/attachments/5/248/warlords-cardback.png';
+  timerRunning = false;
 
+  timerEvent: Subject<void> = new Subject<void>();
 
   matchedCount = 0;
 
@@ -52,7 +55,16 @@ export class BoardComponent  implements OnInit {
     console.log(this.cards);
   }
 
+
+  emitTimerEvent() {
+    this.timerEvent.next();
+  }
+
   cardClicked(index: number): void {
+    if(!this.timerRunning) {
+      this.timerRunning = true;
+      this.emitTimerEvent();
+    }
     const cardInfo = this.cards[index];
 
     if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
@@ -73,11 +85,11 @@ export class BoardComponent  implements OnInit {
       cardOne.state = cardTwo.state = nextState;
 
       this.flippedCards = [];
-      console.log(this.matchedCount);
       if (nextState === 'matched') {
         this.matchedCount++;
-
-        if (this.matchedCount === this.cards.length) {
+        if (this.matchedCount === this.cards.length/2) {
+          this.timerRunning = false;
+          this.emitTimerEvent();
           console.log("end");
         }
       }

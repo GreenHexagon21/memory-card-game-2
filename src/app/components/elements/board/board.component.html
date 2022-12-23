@@ -17,6 +17,7 @@
   <input matInput type="text" [(ngModel)]="bgUrl" />
 </mat-form-field>
 <button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
+<app-timer [startStopEvent]="timerEvent.asObservable()"></app-timer>
 <div class="all-contanier">
   <div
     [ngStyle]="{

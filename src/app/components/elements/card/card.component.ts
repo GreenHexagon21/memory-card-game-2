@@ -27,9 +27,9 @@ import { Card } from 'src/app/shared/models/card';
           opacity: 0
         })
       ),
-      transition("default => flipped", [animate("400ms")]),
-      transition("flipped => default", [animate("400ms")]),
-      transition("* => matched", [animate("400ms")])
+      transition("default => flipped", [animate("300ms")]),
+      transition("flipped => default", [animate("300ms")]),
+      transition("* => matched", [animate("300ms")])
     ])
   ]
 })

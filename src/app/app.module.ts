@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CardComponent } from './components/elements/card/card.component';
 import { BoardComponent } from './components/elements/board/board.component';
 import { HeaderComponent } from './components/elements/header/header.component';
+import { TimerComponent } from './components/elements/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HeaderComponent } from './components/elements/header/header.component';
     MainComponent,
     CardComponent,
     BoardComponent,
-    HeaderComponent
+    HeaderComponent,
+    TimerComponent
   ],
   imports: [
     BrowserModule,
