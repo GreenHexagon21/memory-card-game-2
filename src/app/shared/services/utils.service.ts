@@ -10,4 +10,8 @@ export class UtilsService {
   public format(num: number) {
     return (num + '').length === 1 ? '0' + num : num + '';
   }
+
+  public e621UrlBuilder(tags: string[], order:string, rating:string) {
+    let base = "https://e621.net/posts.json?tags="
+  }
 }

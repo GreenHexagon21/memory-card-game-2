@@ -11,6 +11,8 @@ import {ButtonModule} from 'primeng/button';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
 import {TableModule} from 'primeng/table';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {DropdownModule} from 'primeng/dropdown';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,7 +46,9 @@ import { TimerComponent } from './components/elements/timer/timer.component';
     RouterModule,
     InputNumberModule,
     InputTextModule,
-    TableModule
+    TableModule,
+    InputSwitchModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

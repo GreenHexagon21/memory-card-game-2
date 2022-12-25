@@ -1,7 +1,7 @@
 <p-sidebar
   [(visible)]="visibleSidebar1"
   [baseZIndex]="10000"
-  [style]="{ background: 'rgb(145, 192, 253)' }"
+  [style]="{ width: '25em', background: 'rgb(145, 192, 253)' }"
 >
   <h3>Left Sidebar</h3>
   <div class="input-container rowstyle">
@@ -18,8 +18,8 @@
       buttonLayout="vertical"
       spinnerMode="vertical"
       inputId="vertical"
-      decrementButtonClass="p-button-secondary"
-      incrementButtonClass="p-button-secondary"
+      decrementButtonClass="p-button-primary"
+      incrementButtonClass="p-button-primary"
       incrementButtonIcon="pi pi-plus"
       decrementButtonIcon="pi pi-minus"
     >
@@ -31,8 +31,8 @@
       buttonLayout="vertical"
       spinnerMode="vertical"
       inputId="rowHeight"
-      decrementButtonClass="p-button-secondary"
-      incrementButtonClass="p-button-secondary"
+      decrementButtonClass="p-button-primary"
+      incrementButtonClass="p-button-primary"
       incrementButtonIcon="pi pi-plus"
       decrementButtonIcon="pi pi-minus"
     >
@@ -52,8 +52,8 @@
       buttonLayout="vertical"
       spinnerMode="vertical"
       inputId="imageHeight"
-      decrementButtonClass="p-button-secondary"
-      incrementButtonClass="p-button-secondary"
+      decrementButtonClass="p-button-primary"
+      incrementButtonClass="p-button-primary"
       incrementButtonIcon="pi pi-plus"
       decrementButtonIcon="pi pi-minus"
     >
@@ -65,33 +65,90 @@
       buttonLayout="vertical"
       spinnerMode="vertical"
       inputId="imageWidth"
-      decrementButtonClass="p-button-secondary"
-      incrementButtonClass="p-button-secondary"
+      decrementButtonClass="p-button-primary"
+      incrementButtonClass="p-button-primary"
       incrementButtonIcon="pi pi-plus"
       decrementButtonIcon="pi pi-minus"
     >
     </p-inputNumber>
   </div>
-
-  <div class="field">
-    <label for="poolName" class="block">Pool's name</label>
-    <input
-      id="poolName"
-      type="username"
-      aria-describedby="username1-help"
-      pInputText
-      [(ngModel)]="settings.poolName"
-    />
+  <hr class="hr hr-blurry" />
+  <h5>Switch mode to tag based pooling</h5>
+  <p-inputSwitch [(ngModel)]="checked1"></p-inputSwitch>
+  <hr class="hr hr-blurry" />
+  <div *ngIf="!checked1; else differentMode">
+    <div class="field">
+      <label for="poolName" style="display: block">Pool's name</label>
+      <input
+        id="poolName"
+        type="username"
+        pInputText
+        [(ngModel)]="settings.poolName"
+      />
+    </div>
   </div>
+
+  <ng-template #differentMode>
+    <label for="tags" class="block">Tags (seprated with spaces)</label>
+    <input id="tags" type="text" pInputText [(ngModel)]="tags" />
+    <p-dropdown
+      [options]="ratings"
+      [(ngModel)]="selectedRating"
+      placeholder="Select a rating"
+    ></p-dropdown>
+    <p-dropdown
+      [options]="orders"
+      [(ngModel)]="selectedOrder"
+      placeholder="Order by..."
+    ></p-dropdown>
+    <div>
+      <label for="score">More likes than:</label>
+      <p-inputNumber
+        [(ngModel)]="biggerThanScore"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        inputId="score"
+        spinnerMode="horizontal"
+        [step]="5"
+        decrementButtonClass="p-button-primary"
+        incrementButtonClass="p-button-primary"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+      >
+      </p-inputNumber>
+    </div>
+    <div>
+      <label for="postNum">Number of posts</label>
+      <p-inputNumber
+        [(ngModel)]="numberOfPosts"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        inputId="postNum"
+        spinnerMode="horizontal"
+        [step]="1"
+        decrementButtonClass="p-button-primary"
+        incrementButtonClass="p-button-primary"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+      >
+      </p-inputNumber>
+      <ng-container *ngIf="selectedOrder == 'random'">
+        <h4>New get images every game?</h4>
+        <p-inputSwitch [(ngModel)]="refreshAfterSolving"></p-inputSwitch>
+      </ng-container>
+      <button
+        (click)="loadSettings()"
+        class="btn btn-primary"
+        style="display: block"
+      >
+        Apply
+      </button>
+    </div>
+  </ng-template>
+  <hr class="hr hr-blurry" />
   <div class="field">
     <label for="bgUrl" class="block">Backgrund URL</label>
-    <input
-      id="bgUrl"
-      type="username"
-      aria-describedby="username1-help"
-      pInputText
-      [(ngModel)]="settings.bgUrl"
-    />
+    <input id="bgUrl" type="username" pInputText [(ngModel)]="settings.bgUrl" />
   </div>
   <button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
   <button (click)="resetGame()" class="btn btn-primary">Reset</button>
@@ -130,6 +187,9 @@
       </tr>
     </ng-template>
   </p-table>
+  <button (click)="deleteScores()" class="btn btn-primary">
+    Delete Scores
+  </button>
 </p-sidebar>
 
 <p-button
