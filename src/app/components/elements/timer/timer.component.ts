@@ -1,3 +1,4 @@
+import { StopperTime } from './../../../shared/models/stopper-time';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
@@ -8,31 +9,43 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class TimerComponent implements OnInit {
 
+
   @Input() startStopEvent: Observable<void>;
+  @Input() resetEvent: Observable<void>;
   private eventsSubscription: Subscription;
+  private resetEventsSubscription: Subscription;
+  stopperTime:StopperTime = {
+    mm : 0,
+    ss : 0,
+    ms : 0
+  }
 
   ngOnInit(){
     this.eventsSubscription = this.startStopEvent.subscribe(() => this.clickHandler());
+    this.resetEventsSubscription = this.resetEvent.subscribe(() => this.resetTimer());
   }
-
-  mm = 0;
-  ss = 0;
-  ms = 0;
   isRunning = false;
   timerId;
+
+  resetTimer() {
+    this.stopperTime.mm = 0;
+    this.stopperTime.ss = 0;
+    this.stopperTime.ms = 0;
+    this.isRunning = false;
+  }
 
   clickHandler() {
     if (!this.isRunning) {
       this.timerId = setInterval(() => {
-        this.ms++;
+        this.stopperTime.ms++;
 
-        if (this.ms >= 100) {
-          this.ss++;
-          this.ms = 0;
+        if (this.stopperTime.ms >= 100) {
+          this.stopperTime.ss++;
+          this.stopperTime.ms = 0;
         }
-        if (this.ss >= 60) {
-          this.mm++;
-          this.ss = 0
+        if (this.stopperTime.ss >= 60) {
+          this.stopperTime.mm++;
+          this.stopperTime.ss = 0
         }
       }, 10);
     } else {
@@ -46,6 +59,7 @@ export class TimerComponent implements OnInit {
   }
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
+    this.resetEventsSubscription.unsubscribe();
   }
 
 }

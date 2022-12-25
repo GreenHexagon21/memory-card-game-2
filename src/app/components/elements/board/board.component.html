@@ -1,39 +1,122 @@
-<mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="containerWidth" />
-</mat-form-field>
-<mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="containerHeight" />
-</mat-form-field>
-<mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="imageHeight" />
-</mat-form-field>
-<mat-form-field class="example-form-field">
-  <input matInput type="number" [(ngModel)]="imageWidth" />
-</mat-form-field>
-<mat-form-field class="example-form-field">
-  <input matInput type="text" [(ngModel)]="poolName" />
-</mat-form-field>
-<mat-form-field class="example-form-field">
-  <input matInput type="text" [(ngModel)]="bgUrl" />
-</mat-form-field>
-<button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
-<app-timer [startStopEvent]="timerEvent.asObservable()"></app-timer>
+<p-sidebar [(visible)]="visibleSidebar1" [baseZIndex]="10000">
+  <h3>Left Sidebar</h3>
+  <div class="">
+    <label for="rowWidth" style="display: block">Row Width</label>
+    <p-inputNumber
+      [(ngModel)]="settings.containerWidth"
+      [showButtons]="true"
+      buttonLayout="vertical"
+      spinnerMode="vertical"
+      inputId="vertical"
+      decrementButtonClass="p-button-secondary"
+      incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputNumber>
+  </div>
+  <div class="">
+    <label for="rowHeight" style="display: block">Row Height</label>
+    <p-inputNumber
+      [(ngModel)]="settings.containerHeight"
+      [showButtons]="true"
+      buttonLayout="vertical"
+      spinnerMode="vertical"
+      inputId="rowHeight"
+      decrementButtonClass="p-button-secondary"
+      incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputNumber>
+  </div>
+  <div class="a">
+    <label for="imageHeight" style="display: block">Picture Height</label>
+    <p-inputNumber
+      [(ngModel)]="settings.imageHeight"
+      [showButtons]="true"
+      buttonLayout="vertical"
+      spinnerMode="vertical"
+      inputId="imageHeight"
+      decrementButtonClass="p-button-secondary"
+      incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputNumber>
+  </div>
+  <div class="">
+    <label for="imageWidth" style="display: block">Picture Width</label>
+    <p-inputNumber
+      [(ngModel)]="settings.imageWidth"
+      [showButtons]="true"
+      buttonLayout="vertical"
+      spinnerMode="vertical"
+      inputId="imageWidth"
+      decrementButtonClass="p-button-secondary"
+      incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputNumber>
+  </div>
+
+  <div class="field">
+    <label for="poolName" class="block">Pool's name</label>
+    <input
+      id="poolName"
+      type="username"
+      aria-describedby="username1-help"
+      pInputText
+      [(ngModel)]="settings.poolName"
+    />
+  </div>
+  <div class="field">
+    <label for="bgUrl" class="block">Backgrund URL</label>
+    <input
+      id="bgUrl"
+      type="username"
+      aria-describedby="username1-help"
+      pInputText
+      [(ngModel)]="settings.bgUrl"
+    />
+  </div>
+  <button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
+  <button (click)="resetGame()" class="btn btn-primary">Reset All</button>
+  <button (click)="saveSettings()" class="btn btn-primary">
+    Save Settings
+  </button>
+  <button (click)="loadSettings()" class="btn btn-primary">
+    Load Settings
+  </button>
+</p-sidebar>
+<p-button
+  type="button"
+  class="mr-2"
+  (click)="visibleSidebar1 = true"
+  icon="pi pi-list"
+></p-button>
+
+<app-timer
+  [resetEvent]="timerResetEvent.asObservable()"
+  [startStopEvent]="timerStopStartEvent.asObservable()"
+></app-timer>
 <div class="all-contanier">
   <div
     [ngStyle]="{
-      height: [containerHeight * (imageHeight + 1) + 'rem'],
-      width: [containerWidth * (imageWidth + 1) + 'rem']
+      height: [settings.containerHeight * (settings.imageHeight + 1) + 'rem'],
+      width: [settings.containerWidth * (settings.imageWidth + 1) + 'rem']
     }"
     class="container"
   >
     <ng-container *ngFor="let card of cards; let idx = index">
       <app-card
         [ngStyle]="{
-          height: [imageHeight + 'rem'],
-          width: [imageWidth + 'rem']
+          height: [settings.imageHeight + 'rem'],
+          width: [settings.imageWidth + 'rem']
         }"
         [card]="card"
-        [bgImageUrl]="bgUrl"
+        [bgImageUrl]="settings.bgUrl"
         (cardClicked)="cardClicked(idx)"
       >
       </app-card>

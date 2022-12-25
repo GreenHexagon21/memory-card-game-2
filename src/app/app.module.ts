@@ -5,6 +5,11 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import {SidebarModule} from 'primeng/sidebar';
+import {ButtonModule} from 'primeng/button';
+import {InputNumberModule} from 'primeng/inputnumber';
+import {InputTextModule} from 'primeng/inputtext';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,7 +37,12 @@ import { TimerComponent } from './components/elements/timer/timer.component';
     MatToolbarModule,
     MatGridListModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    SidebarModule,
+    ButtonModule,
+    RouterModule,
+    InputNumberModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]

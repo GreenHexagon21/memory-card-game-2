@@ -1,3 +1,4 @@
+import { Settings } from './../../../shared/models/settings';
 import { Card } from './../../../shared/models/card';
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from 'src/app/shared/services/communication.service';
@@ -10,19 +11,24 @@ import { Subject } from 'rxjs';
 })
 export class BoardComponent  implements OnInit {
 
+  visibleSidebar1;
+  settings: Settings = {
+    imageHeight: 10,
+    imageWidth: 7,
+    containerWidth: 5,
+    containerHeight: 3,
+    poolName : 'drate',
+    bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg'
+  }
+  scores : number[];
   cards : Card[];
   rawCards;
   urlBase = 'https://e621.net/posts.json?tags=set%3A';
   flippedCards: Card[] = [];
-  imageHeight : number = 10;
-  imageWidth: number = 7;
-  containerWidth : number = 5;
-  containerHeight: number = 3;
-  poolName : string = 'drate';
-  bgUrl : string = 'https://media.hearthpwn.com/attachments/5/248/warlords-cardback.png';
   timerRunning = false;
 
-  timerEvent: Subject<void> = new Subject<void>();
+  timerStopStartEvent: Subject<void> = new Subject<void>();
+  timerResetEvent: Subject<void> = new Subject<void>();
 
   matchedCount = 0;
 
@@ -43,7 +49,7 @@ export class BoardComponent  implements OnInit {
 
   async getCards() {
     var jsonData;
-    await this.communicationService.getResponseFromUrl(this.urlBase+this.poolName).then( data => {
+    await this.communicationService.getResponseFromUrl(this.urlBase+this.settings.poolName).then( data => {
       jsonData = data;
     }
     )
@@ -55,9 +61,26 @@ export class BoardComponent  implements OnInit {
     console.log(this.cards);
   }
 
+  async resetGame() {
+    await this.prepCards();
+    this.emitResetTimerEvent();
+  }
+
 
   emitTimerEvent() {
-    this.timerEvent.next();
+    this.timerStopStartEvent.next();
+  }
+
+  emitResetTimerEvent() {
+    this.timerResetEvent.next();
+  }
+
+  saveSettings() {
+    localStorage.setItem('settings',JSON.stringify(this.settings));
+  }
+  loadSettings() {
+    this.settings = JSON.parse(localStorage.getItem('settings'));
+    this.prepCards();
   }
 
   cardClicked(index: number): void {
