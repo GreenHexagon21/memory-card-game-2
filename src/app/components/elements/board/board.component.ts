@@ -14,8 +14,21 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 })
 export class BoardComponent  implements OnInit {
 
+  ratings = ['safe','questionable','explicit'];
+  selectedRating;
+  orders = ['random','score','favorites','date'];
+  selectedOrder;
+
+  tags = "feral -human";
+
+  biggerThanScore = 20;
+  numberOfPosts = 8;
+  refreshAfterSolving;
+
+  checked1;
   visibleSidebar1;
   visibleSidebar2;
+
   settings: Settings = {
     imageHeight: 10,
     imageWidth: 7,
@@ -27,7 +40,8 @@ export class BoardComponent  implements OnInit {
   scores : Score[] = [];
   cards : Card[];
   rawCards;
-  urlBase = 'https://e621.net/posts.json?tags=set%3A';
+  urlBaseforSet = 'https://e621.net/posts.json?tags=set%3A';
+
   flippedCards: Card[] = [];
   timerRunning = false;
 
@@ -56,7 +70,7 @@ export class BoardComponent  implements OnInit {
 
   async getCards() {
     var jsonData;
-    await this.communicationService.getResponseFromUrl(this.urlBase+this.settings.poolName).then( data => {
+    await this.communicationService.getResponseFromUrl(this.urlBaseforSet+this.settings.poolName).then( data => {
       jsonData = data;
     }
     )
@@ -112,6 +126,10 @@ export class BoardComponent  implements OnInit {
     this.scores.push({username: '', cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
     localStorage.setItem('scores',JSON.stringify(this.scores));
     console.log(this.scores);
+  }
+  deleteScores() {
+    localStorage.removeItem('scores')
+    this.scores = [];
   }
 
   checkForCardMatch(): void {
