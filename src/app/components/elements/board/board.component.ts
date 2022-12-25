@@ -1,8 +1,11 @@
+import { StopperTime } from './../../../shared/models/stopper-time';
+import { Score } from './../../../shared/models/score';
 import { Settings } from './../../../shared/models/settings';
 import { Card } from './../../../shared/models/card';
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from 'src/app/shared/services/communication.service';
 import { Subject } from 'rxjs';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-board',
@@ -12,6 +15,7 @@ import { Subject } from 'rxjs';
 export class BoardComponent  implements OnInit {
 
   visibleSidebar1;
+  visibleSidebar2;
   settings: Settings = {
     imageHeight: 10,
     imageWidth: 7,
@@ -20,7 +24,7 @@ export class BoardComponent  implements OnInit {
     poolName : 'drate',
     bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg'
   }
-  scores : number[];
+  scores : Score[] = [];
   cards : Card[];
   rawCards;
   urlBase = 'https://e621.net/posts.json?tags=set%3A';
@@ -32,12 +36,15 @@ export class BoardComponent  implements OnInit {
 
   matchedCount = 0;
 
-  constructor(private communicationService: CommunicationService) {
+  constructor(private communicationService: CommunicationService, public utils: UtilsService) {
 
   }
 
   async ngOnInit() {
     await this.prepCards();
+    if(JSON.parse(localStorage.getItem('scores'))) {
+      this.scores = JSON.parse(localStorage.getItem('scores'))
+    }
     console.log(this.cards);
   }
 
@@ -100,6 +107,13 @@ export class BoardComponent  implements OnInit {
 
     }
   }
+  saveTime($event : StopperTime) {
+
+    this.scores.push({username: '', cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    localStorage.setItem('scores',JSON.stringify(this.scores));
+    console.log(this.scores);
+  }
+
   checkForCardMatch(): void {
     setTimeout(() => {
       const cardOne = this.flippedCards[0];
@@ -113,6 +127,7 @@ export class BoardComponent  implements OnInit {
         if (this.matchedCount === this.cards.length/2) {
           this.timerRunning = false;
           this.emitTimerEvent();
+          this.matchedCount = 0;
           console.log("end");
         }
       }

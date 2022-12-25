@@ -1,5 +1,6 @@
+import { UtilsService } from './../../../shared/services/utils.service';
 import { StopperTime } from './../../../shared/models/stopper-time';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -12,6 +13,9 @@ export class TimerComponent implements OnInit {
 
   @Input() startStopEvent: Observable<void>;
   @Input() resetEvent: Observable<void>;
+
+  @Output() emitStopperTime = new EventEmitter<StopperTime>();
+
   private eventsSubscription: Subscription;
   private resetEventsSubscription: Subscription;
   stopperTime:StopperTime = {
@@ -19,6 +23,8 @@ export class TimerComponent implements OnInit {
     ss : 0,
     ms : 0
   }
+  constructor(private utils: UtilsService) { }
+
 
   ngOnInit(){
     this.eventsSubscription = this.startStopEvent.subscribe(() => this.clickHandler());
@@ -49,14 +55,15 @@ export class TimerComponent implements OnInit {
         }
       }, 10);
     } else {
+      this.emitStopperTime.emit(this.stopperTime);
       clearInterval(this.timerId);
     }
     this.isRunning = !this.isRunning;
   }
-
-  format(num: number) {
-    return (num + '').length === 1 ? '0' + num : num + '';
+  format(number:number) {
+    return this.utils.format(number);
   }
+
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
     this.resetEventsSubscription.unsubscribe();

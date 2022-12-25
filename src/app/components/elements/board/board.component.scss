@@ -9,9 +9,33 @@
   border-radius: 10%;
 }
 
-.a {
-  width: 5rem;
+.input-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  &.rowstyle {
+    gap: 2rem;
+    color: aliceblue;
+  }
+  &.imagestyle {
+    gap: 1rem;
+    color: aliceblue;
+  }
+
 }
+
+.label-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
 
 .container {
   display: flex;
@@ -29,10 +53,5 @@
   justify-content: center;
 }
 
-p-inputNumber {
-  width: 5rem;
-}
 
-.p-inputnumber-buttons-vertical {
-  width: 5rem;
-}
+

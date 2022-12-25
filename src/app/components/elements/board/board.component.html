@@ -1,8 +1,18 @@
-<p-sidebar [(visible)]="visibleSidebar1" [baseZIndex]="10000">
+<p-sidebar
+  [(visible)]="visibleSidebar1"
+  [baseZIndex]="10000"
+  [style]="{ background: 'rgb(145, 192, 253)' }"
+>
   <h3>Left Sidebar</h3>
-  <div class="">
-    <label for="rowWidth" style="display: block">Row Width</label>
+  <div class="input-container rowstyle">
+    <label for="rowWidth" style="display: inline-block !important"
+      >Row Width</label
+    >
+    <label for="rowHeight" style="display: block">Row Height</label>
+  </div>
+  <div class="input-container">
     <p-inputNumber
+      [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
       [(ngModel)]="settings.containerWidth"
       [showButtons]="true"
       buttonLayout="vertical"
@@ -14,10 +24,8 @@
       decrementButtonIcon="pi pi-minus"
     >
     </p-inputNumber>
-  </div>
-  <div class="">
-    <label for="rowHeight" style="display: block">Row Height</label>
     <p-inputNumber
+      [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
       [(ngModel)]="settings.containerHeight"
       [showButtons]="true"
       buttonLayout="vertical"
@@ -30,9 +38,15 @@
     >
     </p-inputNumber>
   </div>
-  <div class="a">
-    <label for="imageHeight" style="display: block">Picture Height</label>
+  <div class="input-container imagestyle">
+    <label for="imageHeight" style="display: inline-block"
+      >Picture Height</label
+    >
+    <label for="imageWidth" style="display: block">Picture Width</label>
+  </div>
+  <div class="input-container">
     <p-inputNumber
+      [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
       [(ngModel)]="settings.imageHeight"
       [showButtons]="true"
       buttonLayout="vertical"
@@ -44,10 +58,8 @@
       decrementButtonIcon="pi pi-minus"
     >
     </p-inputNumber>
-  </div>
-  <div class="">
-    <label for="imageWidth" style="display: block">Picture Width</label>
     <p-inputNumber
+      [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
       [(ngModel)]="settings.imageWidth"
       [showButtons]="true"
       buttonLayout="vertical"
@@ -82,7 +94,7 @@
     />
   </div>
   <button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
-  <button (click)="resetGame()" class="btn btn-primary">Reset All</button>
+  <button (click)="resetGame()" class="btn btn-primary">Reset</button>
   <button (click)="saveSettings()" class="btn btn-primary">
     Save Settings
   </button>
@@ -90,16 +102,53 @@
     Load Settings
   </button>
 </p-sidebar>
+
+<p-sidebar
+  [(visible)]="visibleSidebar2"
+  position="right"
+  [baseZIndex]="10000"
+  [style]="{ width: '30em', background: 'rgb(145, 192, 253)' }"
+>
+  <h3>Right Sidebar</h3>
+  <p-table [value]="scores" [tableStyle]="{ width: '23.5em' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Username</th>
+        <th>Time</th>
+        <th>Number of Cards</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-score>
+      <tr>
+        <td>{{ score.username }}</td>
+        <td>
+          {{ utils.format(score.time.mm) }}:{{ utils.format(score.time.ss) }}:{{
+            utils.format(score.time.ms)
+          }}
+        </td>
+        <td>{{ score.cardcount }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-sidebar>
+
 <p-button
   type="button"
   class="mr-2"
   (click)="visibleSidebar1 = true"
   icon="pi pi-list"
 ></p-button>
+<p-button
+  type="button"
+  class="mr-2"
+  (click)="visibleSidebar2 = true"
+  icon="pi pi-sort-numeric-up"
+></p-button>
 
 <app-timer
   [resetEvent]="timerResetEvent.asObservable()"
   [startStopEvent]="timerStopStartEvent.asObservable()"
+  (emitStopperTime)="saveTime($event)"
 ></app-timer>
 <div class="all-contanier">
   <div
@@ -123,3 +172,10 @@
     </ng-container>
   </div>
 </div>
+<button
+  *ngIf="this.matchedCount === this.cards.length / 2"
+  (click)="resetGame()"
+  class="btn btn-primary"
+>
+  Reset
+</button>

@@ -10,6 +10,7 @@ import {SidebarModule} from 'primeng/sidebar';
 import {ButtonModule} from 'primeng/button';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {InputTextModule} from 'primeng/inputtext';
+import {TableModule} from 'primeng/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -42,7 +43,8 @@ import { TimerComponent } from './components/elements/timer/timer.component';
     ButtonModule,
     RouterModule,
     InputNumberModule,
-    InputTextModule
+    InputTextModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
