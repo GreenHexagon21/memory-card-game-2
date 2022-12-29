@@ -4,6 +4,9 @@
   [style]="{ width: '25em', background: 'rgb(145, 192, 253)' }"
 >
   <h3>Left Sidebar</h3>
+  <label for="tags" class="block">Your Username</label>
+  <input id="tags" type="text" pInputText [(ngModel)]="username" />
+  <hr class="hr hr-blurry" />
   <div class="input-container rowstyle">
     <label for="rowWidth" style="display: inline-block !important"
       >Row Width</label
@@ -74,9 +77,9 @@
   </div>
   <hr class="hr hr-blurry" />
   <h5>Switch mode to tag based pooling</h5>
-  <p-inputSwitch [(ngModel)]="checked1"></p-inputSwitch>
+  <p-inputSwitch [(ngModel)]="mode"></p-inputSwitch>
   <hr class="hr hr-blurry" />
-  <div *ngIf="!checked1; else differentMode">
+  <div *ngIf="!mode; else differentMode">
     <div class="field">
       <label for="poolName" style="display: block">Pool's name</label>
       <input
@@ -136,12 +139,21 @@
         <h4>New get images every game?</h4>
         <p-inputSwitch [(ngModel)]="refreshAfterSolving"></p-inputSwitch>
       </ng-container>
+      <h4>Get images that fit the cards</h4>
+      <p-inputSwitch [(ngModel)]="preserveRatio"></p-inputSwitch>
+      <p-selectButton
+        [options]="animationOptions"
+        [(ngModel)]="selectedAnimationOption"
+        optionLabel="label"
+        optionValue="value"
+      ></p-selectButton>
       <button
-        (click)="loadSettings()"
+        (click)="prepCards()"
         class="btn btn-primary"
         style="display: block"
+        [disabled]="!(selectedRating && selectedOrder)"
       >
-        Apply
+        Get Cards
       </button>
     </div>
   </ng-template>
@@ -232,10 +244,13 @@
     </ng-container>
   </div>
 </div>
-<button
-  *ngIf="this.matchedCount === this.cards.length / 2"
-  (click)="resetGame()"
-  class="btn btn-primary"
->
-  Reset
-</button>
+
+<p-sidebar [(visible)]="visibleSidebar4" position="bottom" [baseZIndex]="10000">
+  <h3>Bottom Sidebar</h3>
+</p-sidebar>
+<p-button
+  type="button"
+  class="mr-2"
+  (click)="visibleSidebar4 = true"
+  icon="pi pi-arrow-up"
+></p-button>

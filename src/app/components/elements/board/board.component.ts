@@ -14,20 +14,27 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 })
 export class BoardComponent  implements OnInit {
 
+  username;
+
   ratings = ['safe','questionable','explicit'];
   selectedRating;
   orders = ['random','score','favorites','date'];
   selectedOrder;
 
-  tags = "feral -human";
+  tags = "feral -human -mlp -diaper -scat -gore -vore";
+  ratio = 0;
+  preserveRatio;
 
   biggerThanScore = 20;
   numberOfPosts = 8;
   refreshAfterSolving;
+  animationOptions: any[];
+  selectedAnimationOption = "nogifs";
 
-  checked1;
+  mode;
   visibleSidebar1;
   visibleSidebar2;
+  visibleSidebar4;
 
   settings: Settings = {
     imageHeight: 10,
@@ -39,6 +46,7 @@ export class BoardComponent  implements OnInit {
   }
   scores : Score[] = [];
   cards : Card[];
+  cardStorage : Card[];
   rawCards;
   urlBaseforSet = 'https://e621.net/posts.json?tags=set%3A';
 
@@ -51,7 +59,7 @@ export class BoardComponent  implements OnInit {
   matchedCount = 0;
 
   constructor(private communicationService: CommunicationService, public utils: UtilsService) {
-
+    this.animationOptions = [{label: 'No gifs', value: 'nogifs'}, {label: 'Gifs', value: 'gifs'}, {label: 'Just Gifs', value: 'allgifs'}];
   }
 
   async ngOnInit() {
@@ -66,15 +74,29 @@ export class BoardComponent  implements OnInit {
     await this.getCards();
     this.cards = this.communicationService.doubleArray(this.cards)
     this.cards = this.communicationService.shuffleArray(this.cards);
+    this.cardStorage = JSON.parse(JSON.stringify(this.cards));
   }
 
   async getCards() {
     var jsonData;
+    if (!this.mode) //If tags are not needed we get this url
+   {
     await this.communicationService.getResponseFromUrl(this.urlBaseforSet+this.settings.poolName).then( data => {
       jsonData = data;
     }
     )
     this.cards = this.communicationService.extractCardsFromJSON(jsonData);
+  } else { //If tags are needed we get this
+    this.ratio = this.settings.imageWidth/this.settings.imageHeight;
+    let tagUrl = this.utils.e621UrlBuilder(this.tags.split(" "),this.selectedOrder,this.selectedRating,this.biggerThanScore,this.preserveRatio?this.ratio:null,this.selectedAnimationOption);
+    await this.communicationService.getResponseFromUrl(tagUrl).then(
+      data => {
+        jsonData = data;
+      }
+    )
+    this.cards = this.communicationService.extractCardsFromJSON(jsonData,this.numberOfPosts);
+  }
+  this.emitResetTimerEvent()
   }
 
   async queryNewUrls() {
@@ -82,9 +104,14 @@ export class BoardComponent  implements OnInit {
     console.log(this.cards);
   }
 
-  async resetGame() {
-    await this.prepCards();
-    this.emitResetTimerEvent();
+  resetGame() {
+    if (this.refreshAfterSolving) {
+      this.prepCards();
+    } else {
+      this.cards = JSON.parse(JSON.stringify(this.cardStorage));
+      this.cards = this.communicationService.shuffleArray(this.cards);
+      this.emitResetTimerEvent();
+    }
   }
 
 
@@ -123,7 +150,7 @@ export class BoardComponent  implements OnInit {
   }
   saveTime($event : StopperTime) {
 
-    this.scores.push({username: '', cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    this.scores.push({username: this.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
     localStorage.setItem('scores',JSON.stringify(this.scores));
     console.log(this.scores);
   }
@@ -146,7 +173,6 @@ export class BoardComponent  implements OnInit {
           this.timerRunning = false;
           this.emitTimerEvent();
           this.matchedCount = 0;
-          console.log("end");
         }
       }
 

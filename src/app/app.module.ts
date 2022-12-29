@@ -13,6 +13,8 @@ import {InputTextModule} from 'primeng/inputtext';
 import {TableModule} from 'primeng/table';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {DropdownModule} from 'primeng/dropdown';
+import {SelectButtonModule} from 'primeng/selectbutton';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +24,7 @@ import { CardComponent } from './components/elements/card/card.component';
 import { BoardComponent } from './components/elements/board/board.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { TimerComponent } from './components/elements/timer/timer.component';
+import { SourcesComponent } from './components/elements/sources/sources.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { TimerComponent } from './components/elements/timer/timer.component';
     CardComponent,
     BoardComponent,
     HeaderComponent,
-    TimerComponent
+    TimerComponent,
+    SourcesComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,8 @@ import { TimerComponent } from './components/elements/timer/timer.component';
     InputTextModule,
     TableModule,
     InputSwitchModule,
-    DropdownModule
+    DropdownModule,
+    SelectButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

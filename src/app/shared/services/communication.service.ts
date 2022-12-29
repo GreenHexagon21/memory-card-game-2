@@ -15,16 +15,20 @@ export class CommunicationService {
     return firstValueFrom(this.http.get(url));
   }
 
-  extractCardsFromJSON(jsonData) {
+  extractCardsFromJSON(jsonData,amount?:number) {
+    let count = 0;
     let cards:Card[] = [];
     if(jsonData != undefined) {
       jsonData['posts'].forEach(post=> {
-        let card : Card = {
-          id: post['id'],
-          imageUrl: post['file']['url'],
-          state: 'default'
-        }
-        cards.push(card);
+        count++;
+        if (count <= (amount? amount : 100)) {
+          let card : Card = {
+            id: post['id'],
+            imageUrl: post['file']['url'],
+            state: 'default'
+          }
+          cards.push(card);
+      }
       });
     }
     return cards;
