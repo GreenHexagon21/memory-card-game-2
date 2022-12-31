@@ -25,7 +25,9 @@ export class CommunicationService {
           let card : Card = {
             id: post['id'],
             imageUrl: post['file']['url'],
-            state: 'default'
+            state: 'default',
+            source: "https://e621.net/posts/"+post['id'],
+            timesFlipped: 0
           }
           cards.push(card);
       }

@@ -1,3 +1,31 @@
+<p-dialog
+  header="Success!"
+  [(visible)]="resetDialogDisplay"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p class="m-0">
+    You completed the game in:
+    <b>{{ formattedMM }}:{{ formattedSS }}:{{ formattedMS }}</b
+    >!
+  </p>
+  <ng-template pTemplate="footer">
+    <p-button
+      (click)="resetGame()"
+      label="New Game"
+      styleClass="p-button-primary"
+    ></p-button>
+    <p-button
+      type="button"
+      class="mr-2"
+      label="Sources"
+      (click)="sourceDisplay()"
+    ></p-button>
+  </ng-template>
+</p-dialog>
+
 <p-sidebar
   [(visible)]="visibleSidebar1"
   [baseZIndex]="10000"
@@ -5,7 +33,7 @@
 >
   <h3>Left Sidebar</h3>
   <label for="tags" class="block">Your Username</label>
-  <input id="tags" type="text" pInputText [(ngModel)]="username" />
+  <input id="tags" type="text" pInputText [(ngModel)]="settings.username" />
   <hr class="hr hr-blurry" />
   <div class="input-container rowstyle">
     <label for="rowWidth" style="display: inline-block !important"
@@ -77,9 +105,9 @@
   </div>
   <hr class="hr hr-blurry" />
   <h5>Switch mode to tag based pooling</h5>
-  <p-inputSwitch [(ngModel)]="mode"></p-inputSwitch>
+  <p-inputSwitch [(ngModel)]="settings.mode"></p-inputSwitch>
   <hr class="hr hr-blurry" />
-  <div *ngIf="!mode; else differentMode">
+  <div *ngIf="!settings.mode; else differentMode">
     <div class="field">
       <label for="poolName" style="display: block">Pool's name</label>
       <input
@@ -93,21 +121,21 @@
 
   <ng-template #differentMode>
     <label for="tags" class="block">Tags (seprated with spaces)</label>
-    <input id="tags" type="text" pInputText [(ngModel)]="tags" />
+    <input id="tags" type="text" pInputText [(ngModel)]="settings.tags" />
     <p-dropdown
       [options]="ratings"
-      [(ngModel)]="selectedRating"
+      [(ngModel)]="settings.selectedRating"
       placeholder="Select a rating"
     ></p-dropdown>
     <p-dropdown
       [options]="orders"
-      [(ngModel)]="selectedOrder"
+      [(ngModel)]="settings.selectedOrder"
       placeholder="Order by..."
     ></p-dropdown>
     <div>
       <label for="score">More likes than:</label>
       <p-inputNumber
-        [(ngModel)]="biggerThanScore"
+        [(ngModel)]="settings.biggerThanScore"
         [showButtons]="true"
         buttonLayout="horizontal"
         inputId="score"
@@ -123,7 +151,7 @@
     <div>
       <label for="postNum">Number of posts</label>
       <p-inputNumber
-        [(ngModel)]="numberOfPosts"
+        [(ngModel)]="settings.numberOfPosts"
         [showButtons]="true"
         buttonLayout="horizontal"
         inputId="postNum"
@@ -135,15 +163,17 @@
         decrementButtonIcon="pi pi-minus"
       >
       </p-inputNumber>
-      <ng-container *ngIf="selectedOrder == 'random'">
+      <ng-container *ngIf="settings.selectedOrder == 'random'">
         <h4>New get images every game?</h4>
-        <p-inputSwitch [(ngModel)]="refreshAfterSolving"></p-inputSwitch>
+        <p-inputSwitch
+          [(ngModel)]="settings.refreshAfterSolving"
+        ></p-inputSwitch>
       </ng-container>
       <h4>Get images that fit the cards</h4>
-      <p-inputSwitch [(ngModel)]="preserveRatio"></p-inputSwitch>
+      <p-inputSwitch [(ngModel)]="settings.preserveRatio"></p-inputSwitch>
       <p-selectButton
         [options]="animationOptions"
-        [(ngModel)]="selectedAnimationOption"
+        [(ngModel)]="settings.selectedAnimationOption"
         optionLabel="label"
         optionValue="value"
       ></p-selectButton>
@@ -151,7 +181,7 @@
         (click)="prepCards()"
         class="btn btn-primary"
         style="display: block"
-        [disabled]="!(selectedRating && selectedOrder)"
+        [disabled]="!(settings.selectedRating && settings.selectedOrder)"
       >
         Get Cards
       </button>
@@ -178,7 +208,7 @@
   [baseZIndex]="10000"
   [style]="{ width: '30em', background: 'rgb(145, 192, 253)' }"
 >
-  <h3>Right Sidebar</h3>
+  <h3>Scores</h3>
   <p-table [value]="scores" [tableStyle]="{ width: '23.5em' }">
     <ng-template pTemplate="header">
       <tr>
@@ -245,12 +275,30 @@
   </div>
 </div>
 
-<p-sidebar [(visible)]="visibleSidebar4" position="bottom" [baseZIndex]="10000">
-  <h3>Bottom Sidebar</h3>
-</p-sidebar>
-<p-button
-  type="button"
-  class="mr-2"
-  (click)="visibleSidebar4 = true"
-  icon="pi pi-arrow-up"
-></p-button>
+<p-dialog
+  header="Sources"
+  [(visible)]="visibleSidebar4"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p-table [value]="uniqueCards" [tableStyle]="{ width: '40rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Image</th>
+        <th>Source</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-card>
+      <tr>
+        <td>
+          <img [src]="card.imageUrl" [alt]="" width="100" class="shadow-4" />
+        </td>
+        <td>
+          <a href="card.source"> {{ card.source }}</a>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>

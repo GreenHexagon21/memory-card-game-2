@@ -14,24 +14,13 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 })
 export class BoardComponent  implements OnInit {
 
-  username;
-
   ratings = ['safe','questionable','explicit'];
-  selectedRating;
   orders = ['random','score','favorites','date'];
-  selectedOrder;
 
-  tags = "feral -human -mlp -diaper -scat -gore -vore";
   ratio = 0;
-  preserveRatio;
 
-  biggerThanScore = 20;
-  numberOfPosts = 8;
-  refreshAfterSolving;
   animationOptions: any[];
-  selectedAnimationOption = "nogifs";
 
-  mode;
   visibleSidebar1;
   visibleSidebar2;
   visibleSidebar4;
@@ -42,12 +31,18 @@ export class BoardComponent  implements OnInit {
     containerWidth: 5,
     containerHeight: 3,
     poolName : 'drate',
-    bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg'
+    bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg',
+    mode: false,
+    tags :  "feral -cub -young -human -mlp -diaper -scat -gore -vore",
+    biggerThanScore: 20,
+    numberOfPosts: 8,
+    selectedAnimationOption: "nogifs"
   }
+
   scores : Score[] = [];
   cards : Card[];
   cardStorage : Card[];
-  rawCards;
+  uniqueCards : Card[];
   urlBaseforSet = 'https://e621.net/posts.json?tags=set%3A';
 
   flippedCards: Card[] = [];
@@ -55,8 +50,13 @@ export class BoardComponent  implements OnInit {
 
   timerStopStartEvent: Subject<void> = new Subject<void>();
   timerResetEvent: Subject<void> = new Subject<void>();
+  formattedMM = "";
+  formattedSS = "";
+  formattedMS = "";
 
   matchedCount = 0;
+
+  resetDialogDisplay = false;
 
   constructor(private communicationService: CommunicationService, public utils: UtilsService) {
     this.animationOptions = [{label: 'No gifs', value: 'nogifs'}, {label: 'Gifs', value: 'gifs'}, {label: 'Just Gifs', value: 'allgifs'}];
@@ -68,6 +68,7 @@ export class BoardComponent  implements OnInit {
       this.scores = JSON.parse(localStorage.getItem('scores'))
     }
     console.log(this.cards);
+
   }
 
   async prepCards() {
@@ -79,7 +80,7 @@ export class BoardComponent  implements OnInit {
 
   async getCards() {
     var jsonData;
-    if (!this.mode) //If tags are not needed we get this url
+    if (!this.settings.mode) //If tags are not needed we get this url
    {
     await this.communicationService.getResponseFromUrl(this.urlBaseforSet+this.settings.poolName).then( data => {
       jsonData = data;
@@ -88,30 +89,36 @@ export class BoardComponent  implements OnInit {
     this.cards = this.communicationService.extractCardsFromJSON(jsonData);
   } else { //If tags are needed we get this
     this.ratio = this.settings.imageWidth/this.settings.imageHeight;
-    let tagUrl = this.utils.e621UrlBuilder(this.tags.split(" "),this.selectedOrder,this.selectedRating,this.biggerThanScore,this.preserveRatio?this.ratio:null,this.selectedAnimationOption);
+    let tagUrl = this.utils.e621UrlBuilder(this.settings.tags.split(" "),this.settings.selectedOrder,this.settings.selectedRating,this.settings.biggerThanScore,this.settings.preserveRatio?this.ratio:null,this.settings.selectedAnimationOption);
     await this.communicationService.getResponseFromUrl(tagUrl).then(
       data => {
         jsonData = data;
       }
     )
-    this.cards = this.communicationService.extractCardsFromJSON(jsonData,this.numberOfPosts);
+    this.cards = this.communicationService.extractCardsFromJSON(jsonData,this.settings.numberOfPosts);
   }
   this.emitResetTimerEvent()
   }
 
   async queryNewUrls() {
     await this.prepCards();
-    console.log(this.cards);
+    this.resetGame();
   }
 
   resetGame() {
-    if (this.refreshAfterSolving) {
+    if(this.timerRunning) {
+      this.emitTimerEvent();
+      this.timerRunning = false;
+    }
+    if (this.settings.refreshAfterSolving) {
       this.prepCards();
     } else {
       this.cards = JSON.parse(JSON.stringify(this.cardStorage));
       this.cards = this.communicationService.shuffleArray(this.cards);
       this.emitResetTimerEvent();
     }
+    this.resetDialogDisplay = false;
+    this.matchedCount= 0;
   }
 
 
@@ -129,6 +136,7 @@ export class BoardComponent  implements OnInit {
   loadSettings() {
     this.settings = JSON.parse(localStorage.getItem('settings'));
     this.prepCards();
+    this.resetGame();
   }
 
   cardClicked(index: number): void {
@@ -150,7 +158,10 @@ export class BoardComponent  implements OnInit {
   }
   saveTime($event : StopperTime) {
 
-    this.scores.push({username: this.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    this.scores.push({username: this.settings.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    this.formattedMM = this.utils.format($event.mm);
+    this.formattedSS = this.utils.format($event.ss);
+    this.formattedMS = this.utils.format($event.ms);
     localStorage.setItem('scores',JSON.stringify(this.scores));
     console.log(this.scores);
   }
@@ -173,10 +184,17 @@ export class BoardComponent  implements OnInit {
           this.timerRunning = false;
           this.emitTimerEvent();
           this.matchedCount = 0;
+          this.resetDialogDisplay = true;
         }
       }
 
     }, 1000);
   }
+  sourceDisplay() {
+    this.visibleSidebar4 = true;
+    this.uniqueCards = [...new Map(this.cards.map(item => [item['id'], item])).values()]
+    console.log(this.uniqueCards);
+  }
+
 
 }
