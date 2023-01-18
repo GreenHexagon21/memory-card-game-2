@@ -1,6 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Card } from 'src/app/shared/models/card';
+import { CardRarities } from 'src/app/shared/models/enums/card-rarities';
 
 @Component({
   selector: 'app-card',
@@ -34,6 +35,7 @@ import { Card } from 'src/app/shared/models/card';
   ]
 })
 export class CardComponent {
+  cardRarities = CardRarities;
   @Input() card: Card;
   @Input() bgImageUrl: string;
 
