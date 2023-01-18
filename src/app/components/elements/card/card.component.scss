@@ -41,7 +41,7 @@ img {
   border-radius: 5px;
 }
 .front-img {
-  padding: 3px;
+  padding: 4px;
 }
 
 .block {
@@ -50,7 +50,7 @@ img {
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
-  --border-size: 3px;
+  --border-size: 4px;
   --border-angle: 0turn;
   background-size: calc(100% - (var(--border-size) * 2))
       calc(100% - (var(--border-size) * 2)),

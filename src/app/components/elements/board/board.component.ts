@@ -75,8 +75,8 @@ export class BoardComponent  implements OnInit {
 
   async prepCards() {
     await this.getCards();
-    this.cards = this.communicationService.doubleArray(this.cards)
-    this.cards = this.communicationService.shuffleArray(this.cards);
+    this.cards = this.utils.multiplyArray(this.cards,2)
+    this.cards = this.utils.shuffleArray(this.cards);
     this.cardStorage = JSON.parse(JSON.stringify(this.cards));
   }
 
@@ -116,7 +116,7 @@ export class BoardComponent  implements OnInit {
       this.prepCards();
     } else {
       this.cards = JSON.parse(JSON.stringify(this.cardStorage));
-      this.cards = this.communicationService.shuffleArray(this.cards);
+      this.cards = this.utils.shuffleArray(this.cards);
       this.emitResetTimerEvent();
     }
     this.resetDialogDisplay = false;
