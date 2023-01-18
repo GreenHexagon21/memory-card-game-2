@@ -15,6 +15,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import {DropdownModule} from 'primeng/dropdown';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {DialogModule} from 'primeng/dialog';
+import {BadgeModule} from 'primeng/badge';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -55,7 +56,8 @@ import { SourcesComponent } from './components/elements/sources/sources.componen
     InputSwitchModule,
     DropdownModule,
     SelectButtonModule,
-    DialogModule
+    DialogModule,
+    BadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
