@@ -7,6 +7,7 @@ import { CommunicationService } from 'src/app/shared/services/communication.serv
 import { Subject } from 'rxjs';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { CardStates } from 'src/app/shared/models/enums/card-states';
+import { Conditional } from '@angular/compiler';
 
 @Component({
   selector: 'app-board',
@@ -28,6 +29,7 @@ export class BoardComponent  implements OnInit {
   visibleSidebar4;
 
   settings: Settings = {
+    matchCountNeeded: 2,
     imageHeight: 10,
     imageWidth: 7,
     containerWidth: 5,
@@ -75,7 +77,7 @@ export class BoardComponent  implements OnInit {
 
   async prepCards() {
     await this.getCards();
-    this.cards = this.utils.multiplyArray(this.cards,2)
+    this.cards = this.utils.multiplyArray(this.cards,this.settings.matchCountNeeded)
     this.cards = this.utils.shuffleArray(this.cards);
     this.cardStorage = JSON.parse(JSON.stringify(this.cards));
   }
@@ -148,11 +150,11 @@ export class BoardComponent  implements OnInit {
     }
     const cardInfo = this.cards[index];
 
-    if (cardInfo.state === CardStates.default && this.flippedCards.length < 2) {
+    if (cardInfo.state === CardStates.default && this.flippedCards.length < this.settings.matchCountNeeded) {
       cardInfo.state = CardStates.flipped;
       this.flippedCards.push(cardInfo);
 
-      if (this.flippedCards.length > 1) {
+      if (this.flippedCards.length > (this.settings.matchCountNeeded-1)) {
         this.checkForCardMatch();
       }
 
@@ -173,25 +175,37 @@ export class BoardComponent  implements OnInit {
   }
 
   checkForCardMatch(): void {
+    let state = CardStates.matched;
+    let lastId;
     setTimeout(() => {
-      const cardOne = this.flippedCards[0];
-      const cardTwo = this.flippedCards[1];
-      const nextState = cardOne.id === cardTwo.id ? CardStates.matched : CardStates.flipped;
-      cardOne.state = cardTwo.state = nextState;
+      this.flippedCards.forEach(card => {
+        if(!lastId) {
+          lastId = card.id;
+        }
+        if(lastId != card.id) {
+          state = CardStates.flipped
+        }
+      });
 
-      this.flippedCards = [];
-      if (nextState == CardStates.matched) {
+      this.flippedCards.forEach(card => {
+        card.state = state;
+      });
+
+      if (state == CardStates.matched) {
         this.matchedCount++;
-        if (this.matchedCount === this.cards.length/2) {
+        if (this.matchedCount === this.cards.length/this.settings.matchCountNeeded) {
           this.timerRunning = false;
           this.emitTimerEvent();
           this.matchedCount = 0;
           this.resetDialogDisplay = true;
         }
       } else {
-        cardOne.state = cardTwo.state = CardStates.default;
-      }
 
+        this.flippedCards.forEach(card => {
+          card.state = CardStates.default;
+        });
+      }
+      this.flippedCards = [];
     }, 1000);
   }
   sourceDisplay() {

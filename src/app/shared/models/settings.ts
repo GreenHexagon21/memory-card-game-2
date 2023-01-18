@@ -1,4 +1,5 @@
 export interface Settings {
+  matchCountNeeded: number,
   imageHeight : number,
   imageWidth: number,
   containerWidth : number,

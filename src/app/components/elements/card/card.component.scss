@@ -50,7 +50,7 @@ img {
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
-  --border-size: 4px;
+  --border-size: 5px;
   --border-angle: 0turn;
   background-size: calc(100% - (var(--border-size) * 2))
       calc(100% - (var(--border-size) * 2)),
