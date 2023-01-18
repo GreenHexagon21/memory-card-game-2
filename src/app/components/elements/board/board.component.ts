@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from 'src/app/shared/services/communication.service';
 import { Subject } from 'rxjs';
 import { UtilsService } from 'src/app/shared/services/utils.service';
+import { CardStates } from 'src/app/shared/models/enums/card-states';
 
 @Component({
   selector: 'app-board',
@@ -16,6 +17,7 @@ export class BoardComponent  implements OnInit {
 
   ratings = ['safe','questionable','explicit'];
   orders = ['random','score','favorites','date'];
+  cardStates = CardStates;
 
   ratio = 0;
 
@@ -146,8 +148,8 @@ export class BoardComponent  implements OnInit {
     }
     const cardInfo = this.cards[index];
 
-    if (cardInfo.state === 'default' && this.flippedCards.length < 2) {
-      cardInfo.state = 'flipped';
+    if (cardInfo.state === CardStates.default && this.flippedCards.length < 2) {
+      cardInfo.state = CardStates.flipped;
       this.flippedCards.push(cardInfo);
 
       if (this.flippedCards.length > 1) {
@@ -174,11 +176,11 @@ export class BoardComponent  implements OnInit {
     setTimeout(() => {
       const cardOne = this.flippedCards[0];
       const cardTwo = this.flippedCards[1];
-      const nextState = cardOne.id === cardTwo.id ? 'matched' : 'default';
+      const nextState = cardOne.id === cardTwo.id ? CardStates.matched : CardStates.flipped;
       cardOne.state = cardTwo.state = nextState;
 
       this.flippedCards = [];
-      if (nextState === 'matched') {
+      if (nextState == CardStates.matched) {
         this.matchedCount++;
         if (this.matchedCount === this.cards.length/2) {
           this.timerRunning = false;
@@ -186,6 +188,8 @@ export class BoardComponent  implements OnInit {
           this.matchedCount = 0;
           this.resetDialogDisplay = true;
         }
+      } else {
+        cardOne.state = cardTwo.state = CardStates.default;
       }
 
     }, 1000);
