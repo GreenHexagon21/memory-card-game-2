@@ -1,7 +1,7 @@
 
 
 .m-card {
-
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,3 +40,80 @@ img {
   object-fit: cover;
   border-radius: 5px;
 }
+.front-img {
+  padding: 3px;
+}
+
+.block {
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  --border-size: 3px;
+  --border-angle: 0turn;
+  background-size: calc(100% - (var(--border-size) * 2))
+      calc(100% - (var(--border-size) * 2)),
+    cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  animation: bg-spin 3s linear infinite;
+  @keyframes bg-spin {
+    to {
+      --border-angle: 1turn;
+    }
+  }
+  &.common {
+    background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), rgb(190, 190, 190), rgb(168, 168, 168), rgb(190, 190, 190));
+  }
+  &.rare {
+    background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), #08f, rgb(0, 217, 255), #08f,);
+  }
+  &.epic {
+    background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), rgb(255, 60, 0), rgb(255, 0, 119), rgb(255, 60, 0));
+  }
+  &.fabled {
+    background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), rgb(23, 194, 0), rgb(121, 214, 0), rgb(23, 194, 0));
+  }
+  &.legendary {
+    background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), rgb(255, 196, 0), rgb(255, 153, 0), rgb(255, 196, 0));
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
