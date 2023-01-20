@@ -53,6 +53,12 @@ img {
   height: 100%;
   object-fit: cover;
   border-radius: 5px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
 }
 .front-img {
   padding: 4px;
@@ -131,3 +137,6 @@ img {
   initial-value: 0turn;
 }
 
+.block:after {
+	filter: blur(50px);
+}
