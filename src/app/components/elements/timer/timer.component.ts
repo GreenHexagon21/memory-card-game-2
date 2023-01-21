@@ -13,11 +13,15 @@ export class TimerComponent implements OnInit {
 
   @Input() startStopEvent: Observable<void>;
   @Input() resetEvent: Observable<void>;
+  @Input() getTime: Observable<void>;
 
+  @Output() emitStopperTimeEnd = new EventEmitter<StopperTime>();
   @Output() emitStopperTime = new EventEmitter<StopperTime>();
 
   private eventsSubscription: Subscription;
   private resetEventsSubscription: Subscription;
+  private getTimeSubscription: Subscription;
+
   stopperTime:StopperTime = {
     mm : 0,
     ss : 0,
@@ -29,6 +33,7 @@ export class TimerComponent implements OnInit {
   ngOnInit(){
     this.eventsSubscription = this.startStopEvent.subscribe(() => this.clickHandler());
     this.resetEventsSubscription = this.resetEvent.subscribe(() => this.resetTimer());
+    this.getTimeSubscription = this.getTime.subscribe(() => this.emitTime());
   }
   isRunning = false;
   timerId;
@@ -38,6 +43,10 @@ export class TimerComponent implements OnInit {
     this.stopperTime.ss = 0;
     this.stopperTime.ms = 0;
     this.isRunning = false;
+  }
+
+  emitTime() {
+    this.emitStopperTime.emit(this.stopperTime);
   }
 
   clickHandler() {
@@ -67,6 +76,7 @@ export class TimerComponent implements OnInit {
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
     this.resetEventsSubscription.unsubscribe();
+    this.getTimeSubscription.unsubscribe();
   }
 
 }

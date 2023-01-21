@@ -4,7 +4,7 @@ import { Settings } from './../../../shared/models/settings';
 import { Card } from './../../../shared/models/card';
 import { Component, OnInit } from '@angular/core';
 import { CommunicationService } from 'src/app/shared/services/communication.service';
-import { Subject } from 'rxjs';
+import { map, Subject, Subscription, timer } from 'rxjs';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { CardStates } from 'src/app/shared/models/enums/card-states';
 import { Conditional } from '@angular/compiler';
@@ -54,6 +54,11 @@ export class BoardComponent  implements OnInit {
 
   timerStopStartEvent: Subject<void> = new Subject<void>();
   timerResetEvent: Subject<void> = new Subject<void>();
+  timerGetEvent: Subject<void> = new Subject<void>();
+
+  timerGetTimerSubscription: Subscription;
+
+  currentTime : StopperTime;
   formattedMM = "";
   formattedSS = "";
   formattedMS = "";
@@ -71,7 +76,11 @@ export class BoardComponent  implements OnInit {
     if(JSON.parse(localStorage.getItem('scores'))) {
       this.scores = JSON.parse(localStorage.getItem('scores'))
     }
-    console.log(this.cards);
+    this.timerGetTimerSubscription = timer(0, 1000).pipe(
+      map(() => {
+        this.emitGetTimeEvent(); // load data contains the http request
+      })
+    ).subscribe();
 
   }
 
@@ -125,6 +134,9 @@ export class BoardComponent  implements OnInit {
     this.matchedCount= 0;
   }
 
+  emitGetTimeEvent() {
+    this.timerGetEvent.next();
+  }
 
   emitTimerEvent() {
     this.timerStopStartEvent.next();
@@ -160,6 +172,13 @@ export class BoardComponent  implements OnInit {
 
     }
   }
+
+  getCurrentTime($event : StopperTime) {
+    this.currentTime = $event;
+    console.log(this.currentTime);
+  }
+
+
   saveTime($event : StopperTime) {
 
     this.scores.push({username: this.settings.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
@@ -167,8 +186,8 @@ export class BoardComponent  implements OnInit {
     this.formattedSS = this.utils.format($event.ss);
     this.formattedMS = this.utils.format($event.ms);
     localStorage.setItem('scores',JSON.stringify(this.scores));
-    console.log(this.scores);
   }
+
   deleteScores() {
     localStorage.removeItem('scores')
     this.scores = [];

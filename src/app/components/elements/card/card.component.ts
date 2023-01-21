@@ -28,8 +28,8 @@ import { CardRarities } from 'src/app/shared/models/enums/card-rarities';
           opacity: 0
         })
       ),
-      transition("default => flipped", [animate("300ms")]),
-      transition("flipped => default", [animate("300ms")]),
+      transition("default => flipped", [animate("200ms")]),
+      transition("flipped => default", [animate("200ms")]),
       transition("* => matched", [animate("300ms")])
     ])
   ]

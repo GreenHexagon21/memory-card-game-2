@@ -250,7 +250,9 @@
 <app-timer
   [resetEvent]="timerResetEvent.asObservable()"
   [startStopEvent]="timerStopStartEvent.asObservable()"
-  (emitStopperTime)="saveTime($event)"
+  [getTime]="timerGetEvent.asObservable()"
+  (emitStopperTimeEnd)="saveTime($event)"
+  (emitStopperTime)="getCurrentTime($event)"
 ></app-timer>
 <div class="all-contanier">
   <div
@@ -297,7 +299,7 @@
           <img [src]="card.imageUrl" [alt]="" width="100" class="shadow-4" />
         </td>
         <td>
-          <a href="card.source"> {{ card.source }}</a>
+          <a [href]="card.source"> {{ card.source }}</a>
         </td>
       </tr>
     </ng-template>
