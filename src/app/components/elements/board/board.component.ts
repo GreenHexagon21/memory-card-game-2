@@ -1,3 +1,4 @@
+import { GlobalsService } from './../../../shared/services/globals.service';
 import { StopperTime } from './../../../shared/models/stopper-time';
 import { Score } from './../../../shared/models/score';
 import { Settings } from './../../../shared/models/settings';
@@ -54,7 +55,6 @@ export class BoardComponent  implements OnInit {
 
   timerStopStartEvent: Subject<void> = new Subject<void>();
   timerResetEvent: Subject<void> = new Subject<void>();
-  timerGetEvent: Subject<void> = new Subject<void>();
 
   timerGetTimerSubscription: Subscription;
 
@@ -67,7 +67,7 @@ export class BoardComponent  implements OnInit {
 
   resetDialogDisplay = false;
 
-  constructor(private communicationService: CommunicationService, public utils: UtilsService) {
+  constructor(private communicationService: CommunicationService, public utils: UtilsService, public global: GlobalsService) {
     this.animationOptions = [{label: 'No gifs', value: 'nogifs'}, {label: 'Gifs', value: 'gifs'}, {label: 'Just Gifs', value: 'allgifs'}];
   }
 
@@ -76,11 +76,6 @@ export class BoardComponent  implements OnInit {
     if(JSON.parse(localStorage.getItem('scores'))) {
       this.scores = JSON.parse(localStorage.getItem('scores'))
     }
-    this.timerGetTimerSubscription = timer(0, 1000).pipe(
-      map(() => {
-        this.emitGetTimeEvent(); // load data contains the http request
-      })
-    ).subscribe();
 
   }
 
@@ -99,7 +94,8 @@ export class BoardComponent  implements OnInit {
       jsonData = data;
     }
     )
-    this.cards = this.communicationService.extractCardsFromJSON(jsonData);
+    this.global.setGlobalCards(this.communicationService.extractCardsFromJSON(jsonData));
+    this.cards = this.global.getGlobalCards();
   } else { //If tags are needed we get this
     this.ratio = this.settings.imageWidth/this.settings.imageHeight;
     let tagUrl = this.utils.e621UrlBuilder(this.settings.tags.split(" "),this.settings.selectedOrder,this.settings.selectedRating,this.settings.biggerThanScore,this.settings.preserveRatio?this.ratio:null,this.settings.selectedAnimationOption);
@@ -108,7 +104,8 @@ export class BoardComponent  implements OnInit {
         jsonData = data;
       }
     )
-    this.cards = this.communicationService.extractCardsFromJSON(jsonData,this.settings.numberOfPosts);
+    this.global.setGlobalCards(this.communicationService.extractCardsFromJSON(jsonData,this.settings.numberOfPosts));
+    this.cards = this.global.getGlobalCards();
   }
   this.emitResetTimerEvent()
   }
@@ -134,9 +131,6 @@ export class BoardComponent  implements OnInit {
     this.matchedCount= 0;
   }
 
-  emitGetTimeEvent() {
-    this.timerGetEvent.next();
-  }
 
   emitTimerEvent() {
     this.timerStopStartEvent.next();
@@ -175,7 +169,7 @@ export class BoardComponent  implements OnInit {
 
   getCurrentTime($event : StopperTime) {
     this.currentTime = $event;
-    console.log(this.currentTime);
+    //console.log(this.currentTime);
   }
 
 

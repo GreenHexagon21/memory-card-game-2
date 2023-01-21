@@ -32,6 +32,7 @@
   [style]="{ width: '25em', background: 'rgb(145, 192, 253)' }"
 >
   <h3>Left Sidebar</h3>
+  {{ global.getGlobalTime() | json }}
   <label for="tags" class="block">Your Username</label>
   <input id="tags" type="text" pInputText [(ngModel)]="settings.username" />
   <hr class="hr hr-blurry" />
@@ -250,7 +251,6 @@
 <app-timer
   [resetEvent]="timerResetEvent.asObservable()"
   [startStopEvent]="timerStopStartEvent.asObservable()"
-  [getTime]="timerGetEvent.asObservable()"
   (emitStopperTimeEnd)="saveTime($event)"
   (emitStopperTime)="getCurrentTime($event)"
 ></app-timer>

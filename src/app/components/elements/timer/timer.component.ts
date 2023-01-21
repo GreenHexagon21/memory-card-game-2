@@ -1,7 +1,8 @@
+import { GlobalsService } from './../../../shared/services/globals.service';
 import { UtilsService } from './../../../shared/services/utils.service';
 import { StopperTime } from './../../../shared/models/stopper-time';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-timer',
@@ -21,19 +22,20 @@ export class TimerComponent implements OnInit {
   private eventsSubscription: Subscription;
   private resetEventsSubscription: Subscription;
   private getTimeSubscription: Subscription;
+  private setTimerTimerSubscription: Subscription;
 
   stopperTime:StopperTime = {
     mm : 0,
     ss : 0,
     ms : 0
   }
-  constructor(private utils: UtilsService) { }
+  constructor(private utils: UtilsService, private globals: GlobalsService) { }
 
 
   ngOnInit(){
     this.eventsSubscription = this.startStopEvent.subscribe(() => this.clickHandler());
     this.resetEventsSubscription = this.resetEvent.subscribe(() => this.resetTimer());
-    this.getTimeSubscription = this.getTime.subscribe(() => this.emitTime());
+    this.setGlobalTime();
   }
   isRunning = false;
   timerId;
@@ -45,9 +47,10 @@ export class TimerComponent implements OnInit {
     this.isRunning = false;
   }
 
-  emitTime() {
-    this.emitStopperTime.emit(this.stopperTime);
+  setGlobalTime() {
+    this.globals.setGlobalTime(this.stopperTime);
   }
+
 
   clickHandler() {
     if (!this.isRunning) {
@@ -76,7 +79,6 @@ export class TimerComponent implements OnInit {
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
     this.resetEventsSubscription.unsubscribe();
-    this.getTimeSubscription.unsubscribe();
   }
 
 }
