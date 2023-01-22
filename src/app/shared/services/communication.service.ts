@@ -31,7 +31,7 @@ export class CommunicationService {
             imageUrl: post['file']['url'],
             state: CardStates.default,
             source: "https://e621.net/posts/"+post['id'],
-            timesFlipped: 0,
+            timesFlipped: -1,
             value: 10,
             rarity: this.cardRarity.Common,
             special: "",

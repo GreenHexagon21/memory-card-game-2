@@ -17,6 +17,10 @@ import { Conditional } from '@angular/compiler';
 })
 export class BoardComponent  implements OnInit {
 
+  //TODO put the following into settings and then the settings to global!
+  flipTolerance = 4;
+  flipRewardMultipler = 2;
+
   ratings = ['safe','questionable','explicit'];
   orders = ['random','score','favorites','date'];
   cardStates = CardStates;
@@ -154,9 +158,11 @@ export class BoardComponent  implements OnInit {
       this.timerRunning = true;
       this.emitTimerEvent();
     }
+
     const cardInfo = this.cards[index];
 
     if (cardInfo.state === CardStates.default && this.flippedCards.length < this.settings.matchCountNeeded) {
+      this.cards[index].timesFlipped++;
       cardInfo.state = CardStates.flipped;
       this.flippedCards.push(cardInfo);
 
@@ -205,6 +211,9 @@ export class BoardComponent  implements OnInit {
       });
 
       if (state == CardStates.matched) {
+        this.flippedCards.forEach(card => {
+          this.global.score += (this.flipTolerance-card.timesFlipped)>0 ? card.value*(1+(this.flipRewardMultipler-1)*((this.flipTolerance-card.timesFlipped)/this.flipTolerance)) : card.value;
+        });
         this.matchedCount++;
         if (this.matchedCount === this.cards.length/this.settings.matchCountNeeded) {
           this.timerRunning = false;
