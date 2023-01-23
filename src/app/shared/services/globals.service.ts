@@ -15,6 +15,21 @@ export class GlobalsService {
 
   constructor() {
 
+    this._settings = {
+      matchCountNeeded: 2,
+      imageHeight: 10,
+      imageWidth: 7,
+      containerWidth: 5,
+      containerHeight: 3,
+      poolName : 'drate',
+      bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg',
+      mode: false,
+      tags :  "feral -cub -young -human -mlp -diaper -scat -gore -vore",
+      biggerThanScore: 20,
+      numberOfPosts: 8,
+      selectedAnimationOption: "nogifs"
+    }
+
   }
 
   public get settings(): Settings {

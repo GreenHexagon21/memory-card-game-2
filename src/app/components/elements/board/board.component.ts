@@ -33,20 +33,6 @@ export class BoardComponent  implements OnInit {
   visibleSidebar2;
   visibleSidebar4;
 
-  settings: Settings = {
-    matchCountNeeded: 2,
-    imageHeight: 10,
-    imageWidth: 7,
-    containerWidth: 5,
-    containerHeight: 3,
-    poolName : 'drate',
-    bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg',
-    mode: false,
-    tags :  "feral -cub -young -human -mlp -diaper -scat -gore -vore",
-    biggerThanScore: 20,
-    numberOfPosts: 8,
-    selectedAnimationOption: "nogifs"
-  }
 
   scores : Score[] = [];
   cards : Card[];
@@ -85,30 +71,30 @@ export class BoardComponent  implements OnInit {
 
   async prepCards() {
     await this.getCards();
-    this.cards = this.utils.multiplyArray(this.cards,this.settings.matchCountNeeded)
+    this.cards = this.utils.multiplyArray(this.cards,this.global.settings.matchCountNeeded)
     this.cards = this.utils.shuffleArray(this.cards);
     this.cardStorage = JSON.parse(JSON.stringify(this.cards));
   }
 
   async getCards() {
     var jsonData;
-    if (!this.settings.mode) //If tags are not needed we get this url
+    if (!this.global.settings.mode) //If tags are not needed we get this url
    {
-    await this.communicationService.getResponseFromUrl(this.urlBaseforSet+this.settings.poolName).then( data => {
+    await this.communicationService.getResponseFromUrl(this.urlBaseforSet+this.global.settings.poolName).then( data => {
       jsonData = data;
     }
     )
     this.global.setGlobalCards(this.communicationService.extractCardsFromJSON(jsonData));
     this.cards = this.global.getGlobalCards();
   } else { //If tags are needed we get this
-    this.ratio = this.settings.imageWidth/this.settings.imageHeight;
-    let tagUrl = this.utils.e621UrlBuilder(this.settings.tags.split(" "),this.settings.selectedOrder,this.settings.selectedRating,this.settings.biggerThanScore,this.settings.preserveRatio?this.ratio:null,this.settings.selectedAnimationOption);
+    this.ratio = this.global.settings.imageWidth/this.global.settings.imageHeight;
+    let tagUrl = this.utils.e621UrlBuilder(this.global.settings.tags.split(" "),this.global.settings.selectedOrder,this.global.settings.selectedRating,this.global.settings.biggerThanScore,this.global.settings.preserveRatio?this.ratio:null,this.global.settings.selectedAnimationOption);
     await this.communicationService.getResponseFromUrl(tagUrl).then(
       data => {
         jsonData = data;
       }
     )
-    this.global.setGlobalCards(this.communicationService.extractCardsFromJSON(jsonData,this.settings.numberOfPosts));
+    this.global.setGlobalCards(this.communicationService.extractCardsFromJSON(jsonData,this.global.settings.numberOfPosts));
     this.cards = this.global.getGlobalCards();
   }
   this.emitResetTimerEvent()
@@ -124,7 +110,7 @@ export class BoardComponent  implements OnInit {
       this.emitTimerEvent();
       this.timerRunning = false;
     }
-    if (this.settings.refreshAfterSolving) {
+    if (this.global.settings.refreshAfterSolving) {
       this.prepCards();
     } else {
       this.cards = JSON.parse(JSON.stringify(this.cardStorage));
@@ -145,10 +131,10 @@ export class BoardComponent  implements OnInit {
   }
 
   saveSettings() {
-    localStorage.setItem('settings',JSON.stringify(this.settings));
+    localStorage.setItem('settings',JSON.stringify(this.global.settings));
   }
   loadSettings() {
-    this.settings = JSON.parse(localStorage.getItem('settings'));
+    this.global.settings = JSON.parse(localStorage.getItem('settings'));
     this.prepCards();
     this.resetGame();
   }
@@ -161,12 +147,12 @@ export class BoardComponent  implements OnInit {
 
     const cardInfo = this.cards[index];
 
-    if (cardInfo.state === CardStates.default && this.flippedCards.length < this.settings.matchCountNeeded) {
+    if (cardInfo.state === CardStates.default && this.flippedCards.length < this.global.settings.matchCountNeeded) {
       this.cards[index].timesFlipped++;
       cardInfo.state = CardStates.flipped;
       this.flippedCards.push(cardInfo);
 
-      if (this.flippedCards.length > (this.settings.matchCountNeeded-1)) {
+      if (this.flippedCards.length > (this.global.settings.matchCountNeeded-1)) {
         this.checkForCardMatch();
       }
 
@@ -181,7 +167,7 @@ export class BoardComponent  implements OnInit {
 
   saveTime($event : StopperTime) {
 
-    this.scores.push({username: this.settings.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    this.scores.push({username: this.global.settings.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
     this.formattedMM = this.utils.format($event.mm);
     this.formattedSS = this.utils.format($event.ss);
     this.formattedMS = this.utils.format($event.ms);
@@ -215,7 +201,7 @@ export class BoardComponent  implements OnInit {
           this.global.score += (this.flipTolerance-card.timesFlipped)>0 ? card.value*(1+(this.flipRewardMultipler-1)*((this.flipTolerance-card.timesFlipped)/this.flipTolerance)) : card.value;
         });
         this.matchedCount++;
-        if (this.matchedCount === this.cards.length/this.settings.matchCountNeeded) {
+        if (this.matchedCount === this.cards.length/this.global.settings.matchCountNeeded) {
           this.timerRunning = false;
           this.emitTimerEvent();
           this.matchedCount = 0;

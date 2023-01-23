@@ -34,7 +34,12 @@
   <h3>Left Sidebar</h3>
   {{ global.getGlobalTime() | json }}
   <label for="tags" class="block">Your Username</label>
-  <input id="tags" type="text" pInputText [(ngModel)]="settings.username" />
+  <input
+    id="tags"
+    type="text"
+    pInputText
+    [(ngModel)]="global.settings.username"
+  />
   <hr class="hr hr-blurry" />
   <div class="input-container rowstyle">
     <label for="rowWidth" style="display: inline-block !important"
@@ -45,7 +50,7 @@
   <div class="input-container">
     <p-inputNumber
       [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
-      [(ngModel)]="settings.containerWidth"
+      [(ngModel)]="global.settings.containerWidth"
       [showButtons]="true"
       buttonLayout="vertical"
       spinnerMode="vertical"
@@ -58,7 +63,7 @@
     </p-inputNumber>
     <p-inputNumber
       [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
-      [(ngModel)]="settings.containerHeight"
+      [(ngModel)]="global.settings.containerHeight"
       [showButtons]="true"
       buttonLayout="vertical"
       spinnerMode="vertical"
@@ -79,7 +84,7 @@
   <div class="input-container">
     <p-inputNumber
       [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
-      [(ngModel)]="settings.imageHeight"
+      [(ngModel)]="global.settings.imageHeight"
       [showButtons]="true"
       buttonLayout="vertical"
       spinnerMode="vertical"
@@ -92,7 +97,7 @@
     </p-inputNumber>
     <p-inputNumber
       [inputStyle]="{ width: '4em', background: 'rgb(186, 217, 255)' }"
-      [(ngModel)]="settings.imageWidth"
+      [(ngModel)]="global.settings.imageWidth"
       [showButtons]="true"
       buttonLayout="vertical"
       spinnerMode="vertical"
@@ -106,37 +111,42 @@
   </div>
   <hr class="hr hr-blurry" />
   <h5>Switch mode to tag based pooling</h5>
-  <p-inputSwitch [(ngModel)]="settings.mode"></p-inputSwitch>
+  <p-inputSwitch [(ngModel)]="global.settings.mode"></p-inputSwitch>
   <hr class="hr hr-blurry" />
-  <div *ngIf="!settings.mode; else differentMode">
+  <div *ngIf="!global.settings.mode; else differentMode">
     <div class="field">
       <label for="poolName" style="display: block">Pool's name</label>
       <input
         id="poolName"
         type="username"
         pInputText
-        [(ngModel)]="settings.poolName"
+        [(ngModel)]="global.settings.poolName"
       />
     </div>
   </div>
 
   <ng-template #differentMode>
     <label for="tags" class="block">Tags (seprated with spaces)</label>
-    <input id="tags" type="text" pInputText [(ngModel)]="settings.tags" />
+    <input
+      id="tags"
+      type="text"
+      pInputText
+      [(ngModel)]="global.settings.tags"
+    />
     <p-dropdown
       [options]="ratings"
-      [(ngModel)]="settings.selectedRating"
+      [(ngModel)]="global.settings.selectedRating"
       placeholder="Select a rating"
     ></p-dropdown>
     <p-dropdown
       [options]="orders"
-      [(ngModel)]="settings.selectedOrder"
+      [(ngModel)]="global.settings.selectedOrder"
       placeholder="Order by..."
     ></p-dropdown>
     <div>
       <label for="score">More likes than:</label>
       <p-inputNumber
-        [(ngModel)]="settings.biggerThanScore"
+        [(ngModel)]="global.settings.biggerThanScore"
         [showButtons]="true"
         buttonLayout="horizontal"
         inputId="score"
@@ -152,7 +162,7 @@
     <div>
       <label for="postNum">Number of posts</label>
       <p-inputNumber
-        [(ngModel)]="settings.numberOfPosts"
+        [(ngModel)]="global.settings.numberOfPosts"
         [showButtons]="true"
         buttonLayout="horizontal"
         inputId="postNum"
@@ -164,17 +174,19 @@
         decrementButtonIcon="pi pi-minus"
       >
       </p-inputNumber>
-      <ng-container *ngIf="settings.selectedOrder == 'random'">
+      <ng-container *ngIf="global.settings.selectedOrder == 'random'">
         <h4>New get images every game?</h4>
         <p-inputSwitch
-          [(ngModel)]="settings.refreshAfterSolving"
+          [(ngModel)]="global.settings.refreshAfterSolving"
         ></p-inputSwitch>
       </ng-container>
       <h4>Get images that fit the cards</h4>
-      <p-inputSwitch [(ngModel)]="settings.preserveRatio"></p-inputSwitch>
+      <p-inputSwitch
+        [(ngModel)]="global.settings.preserveRatio"
+      ></p-inputSwitch>
       <p-selectButton
         [options]="animationOptions"
-        [(ngModel)]="settings.selectedAnimationOption"
+        [(ngModel)]="global.settings.selectedAnimationOption"
         optionLabel="label"
         optionValue="value"
       ></p-selectButton>
@@ -182,7 +194,9 @@
         (click)="prepCards()"
         class="btn btn-primary"
         style="display: block"
-        [disabled]="!(settings.selectedRating && settings.selectedOrder)"
+        [disabled]="
+          !(global.settings.selectedRating && global.settings.selectedOrder)
+        "
       >
         Get Cards
       </button>
@@ -191,15 +205,20 @@
   <hr class="hr hr-blurry" />
   <div class="field">
     <label for="bgUrl" class="block">Backgrund URL</label>
-    <input id="bgUrl" type="username" pInputText [(ngModel)]="settings.bgUrl" />
+    <input
+      id="bgUrl"
+      type="username"
+      pInputText
+      [(ngModel)]="global.settings.bgUrl"
+    />
   </div>
   <button (click)="queryNewUrls()" class="btn btn-primary">Confirm</button>
   <button (click)="resetGame()" class="btn btn-primary">Reset</button>
   <button (click)="saveSettings()" class="btn btn-primary">
-    Save Settings
+    Save global.settings
   </button>
   <button (click)="loadSettings()" class="btn btn-primary">
-    Load Settings
+    Load global.settings
   </button>
 </p-sidebar>
 
@@ -258,19 +277,25 @@
 <div class="all-contanier">
   <div
     [ngStyle]="{
-      height: [settings.containerHeight * (settings.imageHeight + 1) + 'rem'],
-      width: [settings.containerWidth * (settings.imageWidth + 1) + 'rem']
+      height: [
+        global.settings.containerHeight * (global.settings.imageHeight + 1) +
+          'rem'
+      ],
+      width: [
+        global.settings.containerWidth * (global.settings.imageWidth + 1) +
+          'rem'
+      ]
     }"
     class="container"
   >
     <ng-container *ngFor="let card of cards; let idx = index">
       <app-card
         [ngStyle]="{
-          height: [settings.imageHeight + 'rem'],
-          width: [settings.imageWidth + 'rem']
+          height: [global.settings.imageHeight + 'rem'],
+          width: [global.settings.imageWidth + 'rem']
         }"
         [card]="card"
-        [bgImageUrl]="settings.bgUrl"
+        [bgImageUrl]="global.settings.bgUrl"
         (cardClicked)="cardClicked(idx)"
         class="b-card"
       >
