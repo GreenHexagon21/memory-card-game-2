@@ -1,3 +1,4 @@
+import { Score } from './../models/score';
 import { Settings } from './../models/settings';
 import { StopperTime } from './../models/stopper-time';
 import { Injectable, OnInit } from '@angular/core';
@@ -12,6 +13,8 @@ export class GlobalsService {
   private cards: Card[];
   private _score: number = 0;
   private _settings: Settings;
+  private _scores: Score[] = [];
+
 
   constructor() {
 
@@ -24,12 +27,22 @@ export class GlobalsService {
       poolName : 'drate',
       bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg',
       mode: false,
+      flipTolerance: 4,
+      flipRewardMultipler: 2,
       tags :  "feral -cub -young -human -mlp -diaper -scat -gore -vore",
       biggerThanScore: 20,
       numberOfPosts: 8,
       selectedAnimationOption: "nogifs"
     }
 
+  }
+
+  public get scores(): Score[] {
+    return this._scores;
+  }
+
+  public set scores(value: Score[]) {
+    this._scores = value;
   }
 
   public get settings(): Settings {

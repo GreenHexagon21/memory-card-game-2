@@ -229,10 +229,11 @@
   [style]="{ width: '30em', background: 'rgb(145, 192, 253)' }"
 >
   <h3>Scores</h3>
-  <p-table [value]="scores" [tableStyle]="{ width: '23.5em' }">
+  <p-table [value]="global.scores" [tableStyle]="{ width: '23.5em' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Username</th>
+        <th>Score</th>
         <th>Time</th>
         <th>Number of Cards</th>
       </tr>
@@ -240,6 +241,7 @@
     <ng-template pTemplate="body" let-score>
       <tr>
         <td>{{ score.username }}</td>
+        <td>{{ score.score }}</td>
         <td>
           {{ utils.format(score.time.mm) }}:{{ utils.format(score.time.ss) }}:{{
             utils.format(score.time.ms)

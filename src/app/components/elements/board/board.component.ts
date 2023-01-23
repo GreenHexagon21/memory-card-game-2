@@ -17,10 +17,6 @@ import { Conditional } from '@angular/compiler';
 })
 export class BoardComponent  implements OnInit {
 
-  //TODO put the following into settings and then the settings to global!
-  flipTolerance = 4;
-  flipRewardMultipler = 2;
-
   ratings = ['safe','questionable','explicit'];
   orders = ['random','score','favorites','date'];
   cardStates = CardStates;
@@ -34,7 +30,6 @@ export class BoardComponent  implements OnInit {
   visibleSidebar4;
 
 
-  scores : Score[] = [];
   cards : Card[];
   cardStorage : Card[];
   uniqueCards : Card[];
@@ -64,7 +59,7 @@ export class BoardComponent  implements OnInit {
   async ngOnInit() {
     await this.prepCards();
     if(JSON.parse(localStorage.getItem('scores'))) {
-      this.scores = JSON.parse(localStorage.getItem('scores'))
+      this.global.scores = JSON.parse(localStorage.getItem('scores'))
     }
 
   }
@@ -167,16 +162,16 @@ export class BoardComponent  implements OnInit {
 
   saveTime($event : StopperTime) {
 
-    this.scores.push({username: this.global.settings.username, cardcount: this.cards.length, time: JSON.parse(JSON.stringify($event))})
+    this.global.scores.push({username: this.global.settings.username, cardcount: this.cards.length,score:this.global.score, time: JSON.parse(JSON.stringify($event))})
     this.formattedMM = this.utils.format($event.mm);
     this.formattedSS = this.utils.format($event.ss);
     this.formattedMS = this.utils.format($event.ms);
-    localStorage.setItem('scores',JSON.stringify(this.scores));
+    localStorage.setItem('scores',JSON.stringify(this.global.scores));
   }
 
   deleteScores() {
     localStorage.removeItem('scores')
-    this.scores = [];
+    this.global.scores = [];
   }
 
   checkForCardMatch(): void {
@@ -198,7 +193,7 @@ export class BoardComponent  implements OnInit {
 
       if (state == CardStates.matched) {
         this.flippedCards.forEach(card => {
-          this.global.score += (this.flipTolerance-card.timesFlipped)>0 ? card.value*(1+(this.flipRewardMultipler-1)*((this.flipTolerance-card.timesFlipped)/this.flipTolerance)) : card.value;
+          this.global.score += (this.global.settings.flipTolerance-card.timesFlipped)>0 ? card.value*(1+(this.global.settings.flipRewardMultipler-1)*((this.global.settings.flipTolerance-card.timesFlipped)/this.global.settings.flipTolerance)) : card.value;
         });
         this.matchedCount++;
         if (this.matchedCount === this.cards.length/this.global.settings.matchCountNeeded) {
@@ -206,6 +201,7 @@ export class BoardComponent  implements OnInit {
           this.emitTimerEvent();
           this.matchedCount = 0;
           this.resetDialogDisplay = true;
+          this.global.score = 0;
         }
       } else {
 

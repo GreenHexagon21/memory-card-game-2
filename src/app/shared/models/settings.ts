@@ -7,6 +7,8 @@ export interface Settings {
   poolName : string,
   bgUrl : string,
   mode: boolean,
+  flipTolerance: number,
+  flipRewardMultipler: number,
   tags?: string,
   preserveRatio?: string,
   selectedRating?: string,
