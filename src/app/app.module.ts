@@ -27,6 +27,8 @@ import { BoardComponent } from './components/elements/board/board.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { TimerComponent } from './components/elements/timer/timer.component';
 import { SourcesComponent } from './components/elements/sources/sources.component';
+import { HistoryComponent } from './components/elements/history/history.component';
+import { OptionsComponent } from './components/elements/options/options.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { SourcesComponent } from './components/elements/sources/sources.componen
     BoardComponent,
     HeaderComponent,
     TimerComponent,
-    SourcesComponent
+    SourcesComponent,
+    HistoryComponent,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,

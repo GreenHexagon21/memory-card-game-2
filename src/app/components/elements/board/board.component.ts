@@ -162,11 +162,6 @@ export class BoardComponent  implements OnInit {
 
   saveTime($event : StopperTime) {
 
-    this.global.scores.push({username: this.global.settings.username, cardcount: this.cards.length,score:this.global.score, time: JSON.parse(JSON.stringify($event))})
-    this.formattedMM = this.utils.format($event.mm);
-    this.formattedSS = this.utils.format($event.ss);
-    this.formattedMS = this.utils.format($event.ms);
-    localStorage.setItem('scores',JSON.stringify(this.global.scores));
   }
 
   saveGlobalTime() {
