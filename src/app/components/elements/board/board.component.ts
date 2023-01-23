@@ -169,6 +169,14 @@ export class BoardComponent  implements OnInit {
     localStorage.setItem('scores',JSON.stringify(this.global.scores));
   }
 
+  saveGlobalTime() {
+    this.global.scores.push({username: this.global.settings.username, cardcount: this.cards.length,score:this.global.score, time: JSON.parse(JSON.stringify(this.global.getGlobalTime()))})
+    this.formattedMM = this.utils.format(this.global.getGlobalTime().mm);
+    this.formattedSS = this.utils.format(this.global.getGlobalTime().ss);
+    this.formattedMS = this.utils.format(this.global.getGlobalTime().ms);
+    localStorage.setItem('scores',JSON.stringify(this.global.scores));
+  }
+
   deleteScores() {
     localStorage.removeItem('scores')
     this.global.scores = [];
@@ -197,6 +205,7 @@ export class BoardComponent  implements OnInit {
         });
         this.matchedCount++;
         if (this.matchedCount === this.cards.length/this.global.settings.matchCountNeeded) {
+          this.saveGlobalTime();
           this.timerRunning = false;
           this.emitTimerEvent();
           this.matchedCount = 0;
