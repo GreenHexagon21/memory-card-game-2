@@ -47,6 +47,7 @@ export class BoardComponent  implements OnInit {
   formattedMM = "";
   formattedSS = "";
   formattedMS = "";
+  lastScore: number;
 
   matchedCount = 0;
 
@@ -192,10 +193,11 @@ export class BoardComponent  implements OnInit {
 
       if (state == CardStates.matched) {
         this.flippedCards.forEach(card => {
-          this.global.score += (this.global.settings.flipTolerance-card.timesFlipped)>0 ? card.value*(1+(this.global.settings.flipRewardMultipler-1)*((this.global.settings.flipTolerance-card.timesFlipped)/this.global.settings.flipTolerance)) : card.value;
+          this.global.score += (this.global.settings.flipTolerance-card.timesFlipped)>0 ? Math.round(card.value*(1+(this.global.settings.flipRewardMultipler-1)*((this.global.settings.flipTolerance-card.timesFlipped)/this.global.settings.flipTolerance))) : card.value;
         });
         this.matchedCount++;
         if (this.matchedCount === this.cards.length/this.global.settings.matchCountNeeded) {
+          this.lastScore = this.global.score;
           this.saveGlobalTime();
           this.timerRunning = false;
           this.emitTimerEvent();

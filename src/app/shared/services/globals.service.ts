@@ -28,7 +28,7 @@ export class GlobalsService {
       poolName : 'drate',
       bgUrl : 'https://static.vecteezy.com/system/resources/previews/002/135/714/non_2x/blue-honeycomb-abstract-background-wallpaper-and-texture-concept-vector.jpg',
       mode: false,
-      flipTolerance: 4,
+      flipTolerance: 3,
       flipRewardMultipler: 2,
       tags :  "feral -cub -young -human -mlp -diaper -scat -gore -vore",
       biggerThanScore: 20,
