@@ -1,4 +1,5 @@
 export interface Settings {
+  matchCountNeeded: number,
   imageHeight : number,
   imageWidth: number,
   containerWidth : number,
@@ -6,6 +7,8 @@ export interface Settings {
   poolName : string,
   bgUrl : string,
   mode: boolean,
+  flipTolerance: number,
+  flipRewardMultipler: number,
   tags?: string,
   preserveRatio?: string,
   selectedRating?: string,

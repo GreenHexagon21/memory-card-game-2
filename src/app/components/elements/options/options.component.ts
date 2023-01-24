@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { GlobalsService } from 'src/app/shared/services/globals.service';
 
 @Component({
-  selector: 'app-sources',
-  templateUrl: './sources.component.html',
-  styleUrls: ['./sources.component.scss']
+  selector: 'app-options',
+  templateUrl: './options.component.html',
+  styleUrls: ['./options.component.scss']
 })
-export class SourcesComponent {
+export class OptionsComponent {
+
+
   constructor(public global: GlobalsService) {
   }
-
 }

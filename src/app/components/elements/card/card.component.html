@@ -7,6 +7,18 @@
     <img class="center-cropped" [src]="bgImageUrl" />
   </div>
   <div class="center-cropped face front mat-elevation-z10">
-    <img [src]="card.imageUrl" />
+    <div
+      class="block"
+      [ngClass]="{
+        common: card.rarity == cardRarities.Common,
+        rare: card.rarity == cardRarities.Rare,
+        epic: card.rarity == cardRarities.Epic,
+        fabled: card.rarity == cardRarities.Fabled,
+        legendary: card.rarity == cardRarities.Legendary
+      }"
+    >
+      <div class="value">{{ calculatedValue }}</div>
+      <img class="front-img" [src]="card.imageUrl" />
+    </div>
   </div>
 </div>

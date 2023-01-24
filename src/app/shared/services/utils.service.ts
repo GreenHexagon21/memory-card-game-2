@@ -37,4 +37,21 @@ export class UtilsService {
     }
     return finalUrl;
   }
+
+  multiplyArray(array: any[], multiplier:number) {
+    let newArray : any[] = [];
+    array.forEach( e => {
+      for (let index = 0; index < multiplier; index++) {
+        newArray.push({...e});
+      }
+    } )
+    return newArray;
+  }
+
+  shuffleArray(anArray: any[]): any[] {
+    return anArray.map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1]);
+  }
+
 }

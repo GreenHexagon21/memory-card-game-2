@@ -15,6 +15,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import {DropdownModule} from 'primeng/dropdown';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {DialogModule} from 'primeng/dialog';
+import {BadgeModule} from 'primeng/badge';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +27,8 @@ import { BoardComponent } from './components/elements/board/board.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { TimerComponent } from './components/elements/timer/timer.component';
 import { SourcesComponent } from './components/elements/sources/sources.component';
+import { HistoryComponent } from './components/elements/history/history.component';
+import { OptionsComponent } from './components/elements/options/options.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import { SourcesComponent } from './components/elements/sources/sources.componen
     BoardComponent,
     HeaderComponent,
     TimerComponent,
-    SourcesComponent
+    SourcesComponent,
+    HistoryComponent,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +60,8 @@ import { SourcesComponent } from './components/elements/sources/sources.componen
     InputSwitchModule,
     DropdownModule,
     SelectButtonModule,
-    DialogModule
+    DialogModule,
+    BadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
