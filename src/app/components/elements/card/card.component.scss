@@ -91,7 +91,7 @@ img {
       #112 50%,
       #213
     ),
-    conic-gradient(from var(--border-angle), rgb(190, 190, 190), rgb(168, 168, 168), rgb(190, 190, 190));
+    conic-gradient(from var(--border-angle), rgb(190, 190, 190), rgb(124, 124, 124), rgb(190, 190, 190));
   }
   &.rare {
     background-image: conic-gradient(
@@ -118,7 +118,7 @@ img {
       #112 50%,
       #213
     ),
-    conic-gradient(from var(--border-angle), rgb(23, 194, 0), rgb(121, 214, 0), rgb(23, 194, 0));
+    conic-gradient(from var(--border-angle), rgb(23, 194, 0), rgb(175, 255, 70), rgb(23, 194, 0));
   }
   &.legendary {
     background-image: conic-gradient(

@@ -15,6 +15,7 @@ export class GlobalsService {
   private _score: number = 0;
   private _settings: Settings;
   private _scores: Score[] = [];
+  private _valuePool: number;
 
 
   constructor() {
@@ -36,6 +37,12 @@ export class GlobalsService {
       selectedAnimationOption: "nogifs"
     }
 
+  }
+  public get valuePool(): number {
+    return this._valuePool;
+  }
+  public set valuePool(value: number) {
+    this._valuePool = value;
   }
 
   public get currencyScore(): number {

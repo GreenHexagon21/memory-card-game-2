@@ -24,6 +24,7 @@ export class CommunicationService {
     let cards:Card[] = [];
     if(jsonData != undefined) {
       jsonData['posts'].forEach(post=> {
+        console.log(post);
         count++;
         if (count <= (amount? amount : 100)) {
           let card : Card = {
@@ -32,7 +33,7 @@ export class CommunicationService {
             state: CardStates.default,
             source: "https://e621.net/posts/"+post['id'],
             timesFlipped: -1,
-            value: 10,
+            value: post['score']['total'],
             rarity: this.cardRarity.Common,
             special: "",
             modified: ""
