@@ -172,10 +172,6 @@ export class BoardComponent  implements OnInit {
     localStorage.setItem('scores',JSON.stringify(this.global.scores));
   }
 
-  deleteScores() {
-    localStorage.removeItem('scores')
-    this.global.scores = [];
-  }
 
   checkForCardMatch(): void {
     let state = CardStates.matched;

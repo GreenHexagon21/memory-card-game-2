@@ -11,6 +11,7 @@ export class GlobalsService {
 
   private currentTime: StopperTime;
   private cards: Card[];
+  private _currencyScore: number;
   private _score: number = 0;
   private _settings: Settings;
   private _scores: Score[] = [];
@@ -35,6 +36,13 @@ export class GlobalsService {
       selectedAnimationOption: "nogifs"
     }
 
+  }
+
+  public get currencyScore(): number {
+    return this._currencyScore;
+  }
+  public set currencyScore(value: number) {
+    this._currencyScore = value;
   }
 
   public get scores(): Score[] {

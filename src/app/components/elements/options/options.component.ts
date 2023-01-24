@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GlobalsService } from 'src/app/shared/services/globals.service';
 
 @Component({
   selector: 'app-options',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class OptionsComponent {
 
+
+  constructor(public global: GlobalsService) {
+  }
 }
