@@ -129,6 +129,7 @@ export class BoardComponent  implements OnInit {
   saveSettings() {
     localStorage.setItem('settings',JSON.stringify(this.global.settings));
   }
+
   loadSettings() {
     this.global.settings = JSON.parse(localStorage.getItem('settings'));
     this.prepCards();

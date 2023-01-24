@@ -10,11 +10,11 @@
     <div
       class="block"
       [ngClass]="{
-        common: card.rarity == cardRarities.Common,
-        rare: card.rarity == cardRarities.Rare,
-        epic: card.rarity == cardRarities.Epic,
-        fabled: card.rarity == cardRarities.Fabled,
-        legendary: card.rarity == cardRarities.Legendary
+        common: card.rarity == 0,
+        rare: card.rarity == 1,
+        epic: card.rarity == 2,
+        fabled: card.rarity == 3,
+        legendary: card.rarity == 4
       }"
     >
       <div class="value">{{ calculatedValue }}</div>
