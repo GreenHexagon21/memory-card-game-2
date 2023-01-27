@@ -8,8 +8,8 @@
 >
   <p class="m-0">
     You completed the game in:
-    <b>{{ formattedMM }}:{{ formattedSS }}:{{ formattedMS }}</b
-    > with the score of: <b>{{lastScore}}</b> !
+    <b>{{ formattedMM }}:{{ formattedSS }}:{{ formattedMS }}</b> with the score
+    of: <b>{{ lastScore }}</b> !
   </p>
   <ng-template pTemplate="footer">
     <p-button
@@ -228,7 +228,7 @@
   [baseZIndex]="10000"
   [style]="{ width: '30em', background: 'rgb(145, 192, 253)' }"
 >
-<app-history></app-history>
+  <app-history></app-history>
 </p-sidebar>
 
 <p-button
@@ -289,6 +289,5 @@
   [draggable]="false"
   [resizable]="false"
 >
-<app-sources>
-</app-sources>
+  <app-sources> </app-sources>
 </p-dialog>

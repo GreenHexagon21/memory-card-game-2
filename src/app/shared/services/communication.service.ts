@@ -29,23 +29,8 @@ export class CommunicationService {
     let rangeDivision;
 
     if(jsonData != undefined) {
-      let numberOfRarities = Object.keys(CardRarities).length;
-      jsonData['posts'].forEach(post=> {
-        count++;
-        let currentValue
-        if(!minValue) {
-          minValue = Math.round(Math.sqrt((post['score']['total'])));
-          maxValue = Math.round(Math.sqrt((post['score']['total'])));
-        }
-        if (count <= (amount? amount : 100)) {
-          currentValue = Math.round(Math.sqrt((post['score']['total'])))
-          if(currentValue > maxValue)
-            maxValue = Math.round(Math.sqrt((post['score']['total'])))
-          }
-          if(currentValue < minValue)
-            minValue = Math.round(Math.sqrt((post['score']['total'])))
-          }
-      );
+      minValue = Math.round(Math.sqrt(50));
+      maxValue = Math.round(Math.sqrt(2000));
       rangeDivision = (maxValue-minValue)/((Object.keys(CardRarities).length/2)-1);
 
       jsonData['posts'].forEach(post=> {
